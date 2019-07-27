@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="This post is still draft and made public &amp;quot;as is&amp;quot; without any revision and any claim about its correctness and completeness. You can track changes and amends in git log.   If you spot any mi">
+<meta name="keywords" content="bigraphs,milner,matrices,applied category theory">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Matrix calculus for Milner&#39;s Bigraphs">
+<meta property="og:url" content="http://mstn.github.io/2018/09/08/milner-bigraphs-matrices/index.html">
+<meta property="og:site_name" content="mstn&#39;s blog">
+<meta property="og:description" content="This post is still draft and made public &amp;quot;as is&amp;quot; without any revision and any claim about its correctness and completeness. You can track changes and amends in git log.   If you spot any mi">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://mstn.github.io/images/bigraphs/bigraph-anatomy.png">
+<meta property="og:image" content="http://mstn.github.io/images/bigraphs/place-and-link-graphs.png">
+<meta property="og:image" content="http://mstn.github.io/images/bigraphs/compose-trees.png">
+<meta property="og:image" content="http://mstn.github.io/images/bigraphs/link-graphs-compos.png">
+<meta property="og:updated_time" content="2019-07-25T09:29:06.575Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Matrix calculus for Milner&#39;s Bigraphs">
+<meta name="twitter:description" content="This post is still draft and made public &amp;quot;as is&amp;quot; without any revision and any claim about its correctness and completeness. You can track changes and amends in git log.   If you spot any mi">
+<meta name="twitter:image" content="http://mstn.github.io/images/bigraphs/bigraph-anatomy.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="mstn's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://mstn.github.io/2018/09/08/milner-bigraphs-matrices/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Matrix calculus for Milner's Bigraphs | mstn's blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mstn's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">mstn@posteo.org</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://mstn.github.io/2018/09/08/milner-bigraphs-matrices/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mstn">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mstn's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Matrix calculus for Milner's Bigraphs
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-09-08 09:00:00" itemprop="dateCreated datePublished" datetime="2018-09-08T09:00:00+02:00">2018-09-08</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-07-25 11:29:06" itemprop="dateModified" datetime="2019-07-25T11:29:06+02:00">2019-07-25</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>This post is still draft and made public &quot;as is&quot; without any revision and any claim about its correctness and completeness. You can track changes and amends in <a href="https://github.com/mstn/mstn.github.io" target="_blank" rel="noopener">git log</a>.</p>
+</blockquote>
+<blockquote>
+<p>If you spot any mistake or you want to discuss anything, feel free to drop me a line at mstn@posteo.org.</p>
+</blockquote>
+<p>This is the first of (maybe) a series of posts about Applied Category Theory [2]. It is more a personal exercise to &quot;learn by doing&quot; than something to be taken seriously. As a case study, I chose bigraphs: my tentative program is to apply some interesting concepts illustrated in [2] in this particular case.</p>
+<p>Bigraphs [1] are a formalism invented by Robin Milner to model space and communicating agents. Milner is more famous for <a href="https://en.wikipedia.org/wiki/Robin_Milner" target="_blank" rel="noopener">other breakthroughs</a> in theoretical computer science, such as <span class="math inline">\(\pi\)</span>-calculus and ML programming language. He was working on bigraphs at the end of his career, but we find similar ideas even in some of his early works. My source about bigraphs is [1]. You can find the same content in Milner's original papers available online for free.</p>
+<p>Circuit-like diagrams can be represented as matrices, see for example [2]. Here, we want to explore a matrix calculus that could be seen as a generalization of bigraphs.</p>
+<p>While in [2] matrices are used to describe relations between inputs and outputs, here matrices are a sort of dependency graph.</p>
+<p>Probably, the connection between bigraph and matrix calculus is already known, even if I have not found anything on the Web. Anyway, it is interesting enough to write a blog post about it.</p>
+<p>In [2] (I have not read it, I have only read the short summary on Wikipedia) a generalization of bigraphs is proposed where spatial relations are modeled with a relation instead of a function as in Milner. A matrix can represent a sort of relation between rows and columns. Hence, it could be similar to what I am describing here.</p>
+<p>In this post I will introduce bigraphs and their interpretation as matrices in a quite informal way. Hopefully, if I find time, I will focus on Category Theory in next posts.</p>
+<h2 id="informal-introduction">Informal introduction</h2>
+<p>The following picture taken from [1] (p.13) is an example of bigraph.</p>
+<div class="figure">
+<img src="/images/bigraphs/bigraph-anatomy.png">
+
+</div>
+<p>The component of a bigraphs are:</p>
+<ul>
+<li>Vertices <span class="math inline">\(v_0, v_1, v_2, \ldots\)</span>. Vertices are interpreted as ambients and form a hierarchy (i.e. &quot;within&quot; relation).</li>
+<li>Vertices have ports (black dots) and ports are connected through edges <span class="math inline">\(e_0, e_1, \ldots\)</span>. Edges are communication channels. Edges can cross boundaries.</li>
+<li>Roots <span class="math inline">\(0, 1, \ldots\)</span> and sites <span class="math inline">\(0, 1, \ldots\)</span> are outer and inner ambients, respectively. A site is a hole that can be filled with the root of another bigraph.</li>
+<li>Outer names <span class="math inline">\(y_0, y_1, y_2, \ldots\)</span> and inner names <span class="math inline">\(x_0, x_1, \ldots\)</span> are interfaces to connect ports to an external context and edges to internal ports.</li>
+</ul>
+<p>The main insight behind bigraphs is that space and communication are independent. For example, I need to be in a particular room to get wifi access, but, when I send an email, the communication is independent (at the application level) from the spatial configuration of the building where I am.</p>
+<p>Hence, we can think of bigraphs as two independent data structures. For example, the bigraph above can be split into its constituent parts as in the following picture.</p>
+<div class="figure">
+<img src="/images/bigraphs/place-and-link-graphs.png">
+
+</div>
+<p>The two different data structures are called place graph and link graph, respectively. Place graphs describe physical structure whereas link graphs represent communication between agents (i.e. links are communication channels). Space and communication are independent, or orthogonal in Milner's lingo.</p>
+<p>Bigraphs can be composed through their interfaces (roots/sites, inner/outer names). Composition is defined for link graphs and place graphs, separately and independently.</p>
+<p>That is it! You can find more examples in [1]. In the rest of this blog post I am going to formalize a generalization of the intuitive notion of bigraphs in terms of matrices and their operations.</p>
+<h2 id="matrices">Matrices</h2>
+<p>Notation. For <span class="math inline">\(m \in \mathbb{N_{\geq 0}}\)</span>, <span class="math inline">\(\underline{m}\)</span> is the set <span class="math inline">\(\{1, \ldots, m\}\)</span> and <span class="math inline">\(\underline{0} = \emptyset\)</span>.</p>
+<p>An <span class="math inline">\((m, n, R)\)</span> matrix <span class="math inline">\(M\)</span> is a function <span class="math inline">\(M: \underline{m} \times \underline{n} \to R\)</span>. We say <span class="math inline">\(M\)</span> ranges over <span class="math inline">\(\underline{m}\)</span> and <span class="math inline">\(\underline{n}\)</span> and has values in a rig <span class="math inline">\(R\)</span>. We define <span class="math inline">\(\mathit{size} \; M\)</span> as <span class="math inline">\(m \times n\)</span>. We write <span class="math inline">\(M: m \to n\)</span> and omit <span class="math inline">\(R\)</span> when it is clear from the context. Definitions from [2].</p>
+<p>Given a matrix <span class="math inline">\(M: m \to n\)</span>, <span class="math inline">\(I \subseteq \underline{m}\)</span> and <span class="math inline">\(J \subseteq \underline{n}\)</span>, <span class="math inline">\(M_I^J\)</span> is the submatrix of <span class="math inline">\(M\)</span> formed by <span class="math inline">\(I\)</span> rows and <span class="math inline">\(J\)</span> columns. We write just <span class="math inline">\(M_I\)</span> or <span class="math inline">\(M^J\)</span> if <span class="math inline">\(J = \underline{n}\)</span> or <span class="math inline">\(I = \underline{m}\)</span>, respectively. For <span class="math inline">\(i \leq m, j \leq n\)</span>, <span class="math inline">\(M_i\)</span> and <span class="math inline">\(M_j\)</span> are the <span class="math inline">\(i\)</span>-th row and the <span class="math inline">\(j\)</span>-th column of <span class="math inline">\(M\)</span>. <span class="math inline">\(M_{\emptyset} = M^{\emptyset}\)</span> is the empty matrix.</p>
+<h2 id="matrices-1"><span class="math inline">\(2\)</span>-matrices</h2>
+<p>We denote <span class="math inline">\(2\)</span> the rig <span class="math inline">\((\{ 0, 1 \}, \cdot, +)\)</span> where <span class="math inline">\(\cdot\)</span> is logical AND and <span class="math inline">\(+\)</span> is logical OR. In this post we will deal only with <span class="math inline">\(2\)</span>-matrices, but some generalizations are still possible (e.g. stochastic matrices whose entries are probabilities).</p>
+<p>Let <span class="math inline">\(M: m \to n\)</span> and <span class="math inline">\(i=1 \ldots m\)</span>, then the support of <span class="math inline">\(M_i\)</span> is</p>
+<p><span class="math display">\[S_i(M) = \{ M(i,j) \; | \; \exists j = 1 \ldots n-1 \; M(i,j)=1 \}\]</span></p>
+<p>A <span class="math inline">\(2\)</span>-matrix <span class="math inline">\(M: m \to n\)</span> is <strong>functional</strong> if <span class="math inline">\(\sum S_i(M) \leq 1\)</span> for every row <span class="math inline">\(i\)</span>. It is <strong>lean</strong> if the row sum is exactly <span class="math inline">\(1\)</span>.</p>
+<p>A <span class="math inline">\(2\)</span>-matrix <span class="math inline">\(M: m \to n\)</span> is <strong>acyclic</strong> if and only if <span class="math inline">\(M + I\)</span> is a <span class="math inline">\(2\)</span>-matrix with all eigenvalues positive, where <span class="math inline">\(I\)</span> is the identity matrix (from <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph" target="_blank" rel="noopener">Wikipedia</a>).</p>
+<h2 id="partial-product">Partial product</h2>
+<p>Given <span class="math inline">\(M: m \to n\)</span> and <span class="math inline">\(N: k \to l\)</span> over a rig <span class="math inline">\(R\)</span>, <span class="math inline">\(0 \leq i \leq n, k\)</span> and <span class="math inline">\(\cdot\)</span> classical matrix product, the partial product <span class="math inline">\(\cdot_{i}\)</span> of <span class="math inline">\(M\)</span> and <span class="math inline">\(N\)</span> is a <span class="math inline">\(m + (k-i) \times (n - i) + l\)</span> matrix <span class="math inline">\(M \cdot_{i} N\)</span> with this form:</p>
+<p><span class="math display">\[
+M \cdot_{i} N = 
+\begin{array}{cc}
+ \begin{array}{cc} \underline{l} &amp; \quad l + \underline{n-i} \end{array}\\
+  \left(\begin{array}{cc}
+    M^{\underline{i}} \cdot N_{\underline{i}} &amp; M^{\underline{n} \setminus \underline{i}} \\
+    N_{\underline{k} \setminus \underline{i}} &amp; 0
+  \end{array}\right) &amp;
+  \begin{array}{c} \underline{m} \\ m + \underline{k-i} \end{array} 
+\end{array}
+\]</span></p>
+<p>If <span class="math inline">\(i=n=k\)</span>, partial product is the usual matrix product. Instead, if <span class="math inline">\(i = 0\)</span>, partial product is the tensor product.</p>
+<h2 id="forests-and-trees">Forests and trees</h2>
+<p>A <a href="https://en.wikipedia.org/wiki/Tree_(graph_theory)" target="_blank" rel="noopener">forest</a> <span class="math inline">\(F\)</span> is an undirected acyclic graph <span class="math inline">\((V, E)\)</span> where <span class="math inline">\(V\)</span> and <span class="math inline">\(E\)</span> are finite sets. When a forest is also connected is a tree.</p>
+<p>An <span class="math inline">\((R,S)\)</span>-forest <span class="math inline">\((V, E)\)</span> is a forest whose vertex set <span class="math inline">\(V\)</span> is the disjoint union <span class="math inline">\(R \uplus S \uplus U\)</span>, where <span class="math inline">\(R\)</span> are roots, <span class="math inline">\(S\)</span> sites and <span class="math inline">\(U\)</span> internal nodes. Roots and sites represent internal and external interfaces, respectively. Intuitively, <span class="math inline">\((R,S)\)</span>-forests can be composed gluing together their sites and roots.</p>
+<p>We label roots and sites with ordinals <span class="math inline">\(0, 1, \ldots\)</span> and inner nodes with <span class="math inline">\(v, u, \dots\)</span>.</p>
+<p>Note that, in order to stick to Milner's terminology we are using the world &quot;root&quot; in an improper way. In classical graph theory a tree can have zero, one or more roots. In our case an inner node can be a root in the sense of classical graph theory, but it is not an interface root in our definition. In practice there should be no confusion.</p>
+<p>In the Figure 1, <span class="math inline">\(F\)</span> is a forest where <span class="math inline">\(u_0\)</span> is a inner node, roots are <span class="math inline">\(\{0, 1\}\)</span> and sites are <span class="math inline">\(\{0, 1\}\)</span>. The forest is made of two trees, namely two non connected subgraphs. On the right, we see the result of composing <span class="math inline">\(G\)</span> and <span class="math inline">\(F\)</span> together: <span class="math inline">\(F\)</span>'s roots are glued with <span class="math inline">\(G\)</span>'s sites sharing the same name.</p>
+<div class="figure">
+<img src="/images/bigraphs/compose-trees.png" alt="Figure 1. Open forests and their composition">
+<p class="caption"><strong>Figure 1.</strong> Open forests and their composition</p>
+</div>
+<p>Let us assume vertices can be enumerated, i.e. we uniquely assign a column/row index to each vertex. We carefully abuse the notation here. For example we write <span class="math inline">\(M(x,y)\)</span> for labels <span class="math inline">\(x, y\)</span> instead of using the indices associated to <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. We will see in a next post how to formalize that a bit better, but for now we want to explain the basic idea without too obfuscating formal notation.</p>
+<p>An <span class="math inline">\((R,S)\)</span>-forest <span class="math inline">\(F = (R \uplus S \uplus U, E)\)</span> can be represented as a <span class="math inline">\(2\)</span>-matrix <span class="math inline">\(M: |S \uplus U| \to |R \uplus U|\)</span> built in this way.</p>
+<ol style="list-style-type: decimal">
+<li>Assign <span class="math inline">\(S\)</span> sites to rows <span class="math inline">\(\underline{|S|}\)</span> and <span class="math inline">\(U\)</span> inner nodes to rows <span class="math inline">\(|S|+\underline{|U|}\)</span>,</li>
+<li>Assign <span class="math inline">\(R\)</span> roots to columns <span class="math inline">\(\underline{|R|}\)</span> and <span class="math inline">\(U\)</span> inner nodes to columns <span class="math inline">\(|R|+\underline{|U|}\)</span>,</li>
+<li><span class="math inline">\(M(x,y) = (y, x) \in E\)</span>, i.e. <span class="math inline">\(y\)</span> is the parent of <span class="math inline">\(x\)</span>.</li>
+</ol>
+<p>Basically, <span class="math inline">\(M\)</span> is the <a href="https://en.wikipedia.org/wiki/Adjacency_matrix" target="_blank" rel="noopener">adjacency matrix</a> of the forest. We denote <span class="math inline">\([F]\)</span> the matrix corresponding to a forest <span class="math inline">\(F\)</span>.</p>
+<p>Graphs <span class="math inline">\(F\)</span> and <span class="math inline">\(G\)</span> in Figure 1 can be represented as two matrices <span class="math inline">\(M\)</span> and <span class="math inline">\(N\)</span>, respectively.</p>
+<p><span class="math display">\[
+M = 
+\begin{array}{cc}
+ \begin{array}{ccc} 0 \quad 1 \quad u_0 \end{array}\\
+  \left(\begin{array}{cc|c}
+    0 &amp; 0 &amp; 1 \\
+    0 &amp; 1 &amp; 0 \\
+    1 &amp; 0 &amp; 0 
+  \end{array}\right) &amp;
+  \begin{array}{c} 0 \\ 1 \\ u_0 \end{array} 
+\end{array}
+\]</span></p>
+<p><span class="math display">\[
+N = 
+\begin{array}{cc}
+ \begin{array}{ccccc} 0 \quad v_0 \quad v_1 \quad v_2 \quad v_3 \end{array}\\
+  \left(\begin{array}{ccccc}
+    0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+    0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 \\
+    \hline
+    1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+    0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
+    0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
+    0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+  \end{array}\right) &amp;
+  \begin{array}{c} 0 \\ 1 \\ v_0 \\ v_1 \\ v_2 \\ v_3 \end{array} 
+\end{array}
+\]</span></p>
+<p>Given an <span class="math inline">\((R,S)\)</span>-forest <span class="math inline">\(G\)</span> and an <span class="math inline">\((S,T)\)</span>-forest <span class="math inline">\(F\)</span>, composition <span class="math inline">\(G \circ F\)</span> is defined as <span class="math inline">\([F] \cdot_{|S|} [G]\)</span>. If there are no inner nodes, composition boils down to classical matrix multiplication.</p>
+<p>In our example <span class="math inline">\(S=\{0, 1 \}\)</span> and <span class="math inline">\(i=2\)</span>, we have separated with a line the two sub-matrices <span class="math inline">\(M^{\underline{i}}\)</span> and <span class="math inline">\(N_{\underline{i}}\)</span> induced by <span class="math inline">\(S\)</span>. The partial product <span class="math inline">\(M \cdot_i N\)</span> is the following matrix.</p>
+<p><span class="math display">\[
+M \cdot_i N = 
+\begin{array}{cc}
+ \begin{array}{ccccc} 0 \quad v_0 \quad v_1 \quad v_2 \quad v_3 \quad u_0 \end{array}\\
+  \left(\begin{array}{ccccc|c}
+    0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 \\
+    0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 \\
+    0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
+    \hline
+    1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+    0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+    0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+    0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\
+  \end{array}\right) &amp;
+  \begin{array}{c} 0 \\ 1 \\ u_0 \\ v_0 \\ v_1 \\ v_2 \\ v_3 \end{array} 
+\end{array}
+\]</span></p>
+<p>We have separated the four sub-matrices of the definition above with vertical and horizontal lines. It is easy to verify that the matrix corresponds to the composition of the two trees of this example.</p>
+<p>In Milner, tensor product is defined if interfaces are disjoint. We define tensor product always up to renaming of interfaces (i.e. disjoint sum of names). Given an <span class="math inline">\((R,S)\)</span>-forest <span class="math inline">\(G\)</span> and an <span class="math inline">\((T, V)\)</span>-forest <span class="math inline">\(F\)</span>, the tensor product <span class="math inline">\(G \otimes F\)</span> is a <span class="math inline">\((R+T, S+V)\)</span>-forest whose matrix <span class="math inline">\([G \otimes F]\)</span> is <span class="math inline">\([F] \circ_\emptyset [G]\)</span>.</p>
+<p>It is not hard to see that <span class="math inline">\(\cdot_\emptyset\)</span> is the matricial tensor product and it is equivalent to the juxtaposition of two trees (e.g. parallel composition).</p>
+<p>Not every matrix is a forest, of course. In order to enforce that we need to require two additional properties on <span class="math inline">\(M\)</span>:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(M\)</span> is functional,</li>
+<li><span class="math inline">\(M^{N}_{N}\)</span> is acyclic.</li>
+</ol>
+<h2 id="port-graphs">Port graphs</h2>
+<p>Partial product applies to matrices in general. So we can model more generic data structure relaxing the acyclic condition that defines trees and forests. This leads us to the example of port graphs.</p>
+<p>Port graphs are graphs whose vertices have ports and edges connect different ports. Formally, an <span class="math inline">\((X, Y)\)</span>-port graph <span class="math inline">\(G\)</span> is <span class="math inline">\((V, E, \mathit{ctrl}, \mathit{link})\)</span> where <span class="math inline">\(V\)</span> is a set of vertices, <span class="math inline">\(E\)</span> a set of edges, <span class="math inline">\(\mathit{ctrl}: V \to \mathbb{N}\)</span> and <span class="math inline">\(\mathit{link}: X \cup P \to Y \cup E\)</span> where <span class="math inline">\(P=\{ (v, i) \;|\; v \in V \wedge i \in \underline{\mathit{ctrl}(v)} \}\)</span>.</p>
+<p>An <span class="math inline">\((X, Y)\)</span>-port graph <span class="math inline">\(G\)</span> can be represented as a functional matrix <span class="math inline">\(L: |X \uplus P| \to |Y \uplus E|\)</span> built in this way.</p>
+<ol style="list-style-type: decimal">
+<li>Assign <span class="math inline">\(X\)</span> inner names to rows <span class="math inline">\(\underline{|X|}\)</span> and <span class="math inline">\(P\)</span> ports to rows <span class="math inline">\(|X|+\underline{|P|}\)</span>,</li>
+<li>Assign <span class="math inline">\(Y\)</span> outer names to columns <span class="math inline">\(\underline{|Y|}\)</span> and <span class="math inline">\(E\)</span> edges to columns <span class="math inline">\(|Y|+\underline{|E|}\)</span>,</li>
+<li><span class="math inline">\(L(x, y) = 1\)</span> if and only if <span class="math inline">\(\mathit{link}(x) = y\)</span>.</li>
+</ol>
+<p>We can compose port graphs by product as we did for forests.</p>
+<div class="figure">
+<img src="/images/bigraphs/link-graphs-compos.png" alt="Figure 2. Composition of port graphs">
+<p class="caption"><strong>Figure 2.</strong> Composition of port graphs</p>
+</div>
+<p>Composition of port graphs is the partial product of their respective matrices.</p>
+<h2 id="partial-sum">Partial sum</h2>
+<p>Partial product preserves acyclic and functional properties of matrices. Now we define partial sum where functionality is not preserved. Partial sum is a generalization of Milner's parallel product. Note that Milner's parallel product preserves functionality.</p>
+<p>We define sum on sub-matrices. Let <span class="math inline">\(M: m \to n\)</span> and <span class="math inline">\(N: k \to l\)</span> be two matrices and <span class="math inline">\(i \leq m, k\)</span> and <span class="math inline">\(j \leq n, j\)</span>, then the partial sum <span class="math inline">\(+_i^j\)</span> of <span class="math inline">\(M\)</span> and <span class="math inline">\(N\)</span> is a <span class="math inline">\(m+k-i \times n+l-j\)</span> matrix <span class="math inline">\(M +_i^j N\)</span> of this form:</p>
+<p><span class="math display">\[
+M +_i^j N = 
+\begin{array}{cc}
+ \begin{array}{ccc} \underline{j} &amp; \quad \underline{n} \setminus j \quad \underline{l} \setminus j \end{array}\\
+  \left(\begin{array}{ccc}
+    M_{\underline{i}}^{\underline{j}} + N_{\underline{i}}^{\underline{j}} &amp; M_{\underline{i}}^{\underline{n} \setminus j} &amp; N_{\underline{i}}^{\underline{l} \setminus j} \\
+    M_{\underline{m}-i}^{j} &amp; M_{\underline{n} \setminus i}^{\underline{n} \setminus j} &amp; 0 \\
+    N_{\underline{n} \setminus i}^{\underline{j}} &amp; 0 &amp; N_{\underline{k} \setminus i}^{\underline{l} \setminus j}
+  \end{array}\right) &amp;
+  \begin{array}{c} \underline{i} \\ \underline{m} \setminus i  \\ \underline{k} \setminus i \end{array} 
+\end{array}
+\]</span></p>
+<p>If <span class="math inline">\(i = j = 0\)</span>, then <span class="math inline">\(+_i^j\)</span> is the tensor product. If <span class="math inline">\(i=m=k\)</span> and <span class="math inline">\(j=n=l\)</span>, partial sum is the classical matrix sum operation.</p>
+<p>The definition above remembers Milner's definition of parallel product when <span class="math inline">\(M_{\underline{i}}^{\underline{j}} = N_{\underline{i}}^{\underline{j}}\)</span>.</p>
+<p>If <span class="math inline">\(M: m \to n\)</span> and <span class="math inline">\(N: k \to l\)</span> are two matrices, there are four ways (up to isomorphism?) to compose them: <span class="math inline">\(M \cdot_i N\)</span>, <span class="math inline">\(M \cdot_i N\)</span>, <span class="math inline">\(M +_i^0 N\)</span> (<span class="math inline">\(N +_i^0 M\)</span>) and <span class="math inline">\(M +_0^i N\)</span> (<span class="math inline">\(N +_0^i M\)</span>) for some proper <span class="math inline">\(i\)</span>. The four ways are equivalent and correspond to tensor product when <span class="math inline">\(i=0\)</span>. If we think in terms of interfaces from the examples above, the four ways are equivalent when interfaces are fully disjoint.</p>
+<h2 id="final-notes">Final notes</h2>
+<p>Place graphs and link graphs are (surprise, surprise!) special cases of forests and port graphs, respectively.</p>
+<p>The underlying matrix for place graphs is functional and cyclic whereas for link graphs is only functional. We can relax both conditions and define an algebra on generic matrices.</p>
+<p>Link graph interfaces are finite set of names and not ordinals. In theory, ordinals and finite sets of names are the same (i.e. isomorphic). However, in practice, it might be convenient to have finite sets of names instead of anonymous numbers. As it is discussed in the Appendix of [1], we can define parallel composition with name sharing. From a categorical view point, this means that the wanted symmetry is achieved without cumbersome switch morphisms, which sounds lovely.</p>
+<p>So, what if we want to replace ordinals with finite sets?</p>
+<p>We could extend the definition of matrix with named columns and rows. For example, an <span class="math inline">\((X, Y, R)\)</span> matrix <span class="math inline">\(M\)</span> is a function <span class="math inline">\(M: X \times Y \to R\)</span>. We say <span class="math inline">\(M\)</span> ranges over finite sets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> and has values in some rig <span class="math inline">\(R\)</span>. We define <span class="math inline">\(\mathit{size} \; M\)</span> as <span class="math inline">\(|X| \times |Y|\)</span>.</p>
+<p>Partial product and sum are more or less defined as above. We should pay attention to name clashing, though. So we need to define disjoint union of name sets. I do not find this approach convincing, since it makes the notation heavier. So what I will try next is the keep bare matrices as &quot;semantic&quot; referents and build the mapping between names and ordinals on the top of that.</p>
+<h2 id="references">References</h2>
+<p>[1] Robin Milner. The space and motion of communicating agents. Cambridge University Press, 2009.</p>
+<p>[2] Brendan Fong and David I. Spivak. &quot;Seven Sketches in Compositionality: An Invitation to Applied Category Theory.&quot; arXiv preprint arXiv:1803.05316 (2018).</p>
+<p>[3] Michele Sevegnani and Muffy Calder. &quot;Bigraphs with sharing.&quot; Theoretical Computer Science 577 (2015): 43-73.</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/bigraphs/" rel="tag"># bigraphs</a>
+          
+            <a href="/tags/milner/" rel="tag"># milner</a>
+          
+            <a href="/tags/matrices/" rel="tag"># matrices</a>
+          
+            <a href="/tags/applied-category-theory/" rel="tag"># applied category theory</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/06/weekly-digest-272018/" rel="next" title="Weekly digest (week 27-2018)">
+                <i class="fa fa-chevron-left"></i> Weekly digest (week 27-2018)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/06/sketching-a-language-for-web/" rel="prev" title="Sketching a language for Web Programming">
+                Sketching a language for Web Programming <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">mstn</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mstn" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.npmjs.com/~mstn" target="_blank" title="Npm"><i class="fa fa-fw fa-code"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://atmospherejs.com/mstn" target="_blank" title="Atmosphere"><i class="fa fa-fw fa-rocket"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://medium.com/@mstn" target="_blank" title="Medium"><i class="fa fa-fw fa-medium"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mstn@posteo.org" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#informal-introduction"><span class="nav-number">1.</span> <span class="nav-text">Informal introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#matrices"><span class="nav-number">2.</span> <span class="nav-text">Matrices</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#matrices-1"><span class="nav-number">3.</span> <span class="nav-text">\(2\)-matrices</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#partial-product"><span class="nav-number">4.</span> <span class="nav-text">Partial product</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forests-and-trees"><span class="nav-number">5.</span> <span class="nav-text">Forests and trees</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#port-graphs"><span class="nav-number">6.</span> <span class="nav-text">Port graphs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#partial-sum"><span class="nav-number">7.</span> <span class="nav-text">Partial sum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final-notes"><span class="nav-number">8.</span> <span class="nav-text">Final notes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#references"><span class="nav-number">9.</span> <span class="nav-text">References</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mstn</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-80361243-4"></script><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" /><script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script><script>window.cookieconsent.initialise({content: {message: "This website uses cookies (gtag/Google Analytics) to measure content popularity. If I see there is interest in what I write, I am more encouraged to publish new stuff. If you click on the button, you will give your consent for cookies.",dismiss: "Accept Cookies",},onStatusChange: function(status) {  if ( this.hasConsented() ) {       window.dataLayer = window.dataLayer || [];       function gtag(){dataLayer.push(arguments);}       gtag("js", new Date());       gtag("config", "UA-80361243-4");   } },"palette": {     "popup": {       "background": "#000"     },     "button": {       "background": "#f1d600"     }   } })</script></body>
+</html>

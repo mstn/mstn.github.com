@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Typescript is becoming very popular. It is one of the ten most used languages on Github and its adoption has increased a lot in the past years (source). The success of Typescript is in part due to the">
+<meta name="keywords" content="typescript,type theory,software engineering">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Typescript for typeless people">
+<meta property="og:url" content="http://mstn.github.io/2019/07/27/typescript-for-typeless-people/index.html">
+<meta property="og:site_name" content="mstn&#39;s blog">
+<meta property="og:description" content="Typescript is becoming very popular. It is one of the ten most used languages on Github and its adoption has increased a lot in the past years (source). The success of Typescript is in part due to the">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-26T14:09:51.365Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Typescript for typeless people">
+<meta name="twitter:description" content="Typescript is becoming very popular. It is one of the ten most used languages on Github and its adoption has increased a lot in the past years (source). The success of Typescript is in part due to the">
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="mstn's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://mstn.github.io/2019/07/27/typescript-for-typeless-people/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Typescript for typeless people | mstn's blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mstn's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">mstn@posteo.org</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://mstn.github.io/2019/07/27/typescript-for-typeless-people/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mstn">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mstn's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Typescript for typeless people
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-27 09:00:00" itemprop="dateCreated datePublished" datetime="2019-07-27T09:00:00+02:00">2019-07-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-07-26 16:09:51" itemprop="dateModified" datetime="2019-07-26T16:09:51+02:00">2019-07-26</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Typescript is becoming very popular. It is one of the ten most used languages on Github and its adoption has increased a lot in the past years (<a href="https://hackernoon.com/major-programming-trends-to-prepare-for-in-2019-169987cc75f4" target="_blank" rel="noopener">source</a>). The success of Typescript is in part due to the current trend in software engineering that rediscovered types. Strongly typeness and safety have become desirable properties of our programming languages to such a point that the terms are often used in an improper way, like marketing buzzwords, and types have acquired thaumaturgical qualities, like producing bug-free code or transforming frogs into 10x programmers.</p>
+<h1 id="types-are-just-a-tool">Types are just a tool</h1>
+<p>I am old enough to remember the times when types were considered harmful. Thus, I am very skeptic when people rediscover a technology or an idea.</p>
+<p>Some common objections against types were and are:</p>
+<ul>
+<li>Types add overhead and reduce productivity.</li>
+<li>There is no real case when you absolutely need them.</li>
+</ul>
+<p>I generally agree that these opinions are <em>sometimes</em> true.</p>
+<p>I do not think that <em>any</em> silver-bullet can increase productivity. Software production is a complex process where several factors come into play and a single technology, methodology or tools are not enough to determine the fate of a project.</p>
+<p>Actually, some tools can increase programming productivity. I think that it is &quot;scientifically&quot; proved that big screens can. If I have to choose between a big screen and a typed language, I will choose the former without any doubt. However, a tool is useful if you use it in the right way. If you sit on your monitor instead of watching it, it won't increase your productivity at all. You should also switch it on, at least I was told so.</p>
+<p>Types are tools like big screens. However, they are more sophisticated than a monitor. This means that it could be difficult to find the right way to use them. And, on the other side, it is easier to be overwhelmed by them.</p>
+<h1 id="to-type-or-not-to-type-thats-the-wrong-question">To type or not to type: that's the (wrong) question</h1>
+<p>There is also a second aspect. What do we mean with &quot;types&quot;? How many different ways to use types in programming languages exist?</p>
+<p>Programmers have a binary view of the world: good and bad, 0 and 1. When they evaluate a tool, they tend to manifest strong opinions (like me in this post maybe): &quot;it is crap&quot; or &quot;it is awesome&quot;. But life is usually more complex than that.</p>
+<p>The real question is not &quot;to type or not to type&quot;. Types are not a binary feature of programming languages. It does not make sense to talk about typeful and typeless because it is not the case that a language can be with or without types.</p>
+<p>All programming languages have a type system. But all type systems are different.</p>
+<p>I think that the hostility against types has historical roots. Around 2008 people started to complain about types and the typeless revolution began. In my opinion, that was not a revolt against all type systems, but against Java. Java was the language taught in universities and used in industry. It came with the promise of a better world. In reality it carried to us only a heavy type system.</p>
+<p>I did not like Java. I do not know if things improved over there. I am biased toward it and probably what I say is unfair. However, I think that some of the objections against types are objections against Java/C++/C# type systems. As such I agree with them.</p>
+<p>Something similar happened in the database land. In the same years, people got fed up with the traditional databases, that is, SQL. A lot of new paradigms emerged. A few of them survived (e.g. MongoDB) with criticisms and we are rediscovering now that SQL was not that bad. In this case, in my opinion, the war was not against SQL in itself, but against the lack of tools. Do you remember Oracle and how easy was in comparison to work with MongoDB? If something good was left by the NoSQL revolution, it is more attention to the quality of tools for developers, from code editors to debugging tools and database user interfaces.</p>
+<p>So, what about Typescript? It is not a magic wand, for sure. However, I believe that it can be useful in some contexts and when properly used. In addition, its type system has the flexibility and hackability of some dynamic languages. But hold on a minute and let me introduce some terminology.</p>
+<h1 id="a-little-type-theory">A little type theory</h1>
+<p>Here is a quick recap based on Wikipedia.</p>
+<ul>
+<li><strong>Type checking</strong> is the process of verifying type constraints</li>
+<li><strong>Static type checking</strong> is type checking at compile time</li>
+<li><strong>Dynamic type checking</strong> is type checking at runtime</li>
+<li><strong>Strongly typed</strong> is an informal notion and means roughly &quot;how much I am allowed to violate type constraints&quot;. For example, if <code>x</code> is of type integer, it cannot be multiplied by <code>0.2</code> in a very strongly typed language because multiplication over floats is not allowed over integers.</li>
+<li><strong>Explicit</strong> means that every variable must be typed.</li>
+<li><strong>Implicit</strong> means that some types can be inferred by the compiler or interpreter.</li>
+<li><strong>Safety</strong> is a property that Milner expressed as &quot;Well-typed programs cannot go wrong&quot;. In other words, if we can assign a type to an expression, we are sure that that expression can be evaluated without surprises.</li>
+<li><strong>Inheritance</strong> is a <code>is-a</code> relation. Tom <code>is-a</code> cat, but Tom <code>is-a</code> an animal, too. There are at least two kinds of inheritance: structural and nominal. Nominal inheritance means that an item is labelled with its type: Tom <code>is-a</code> cat because I say it is a cat. Structural inheritance means that two items are the same if they share the same properties. Duck typing is a sort of structural inheritance. Here, we do not consider prototypical inheritance typical of Javascript.</li>
+</ul>
+<p>This is a table with some examples from some programming languages.</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>type checking</th>
+<th>strong/weak</th>
+<th>typing</th>
+<th>safety</th>
+<th>inheritance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Typescript</td>
+<td>static/type guards</td>
+<td>strong, but...</td>
+<td>implicit</td>
+<td>no</td>
+<td>structural</td>
+</tr>
+<tr class="even">
+<td>Java</td>
+<td>static/dynamic</td>
+<td>strong</td>
+<td>explicit</td>
+<td>yes</td>
+<td>nominal</td>
+</tr>
+<tr class="odd">
+<td>Ruby</td>
+<td>dynamic</td>
+<td>strong</td>
+<td>?</td>
+<td>NA</td>
+<td>duck</td>
+</tr>
+<tr class="even">
+<td>Python</td>
+<td>dynamic</td>
+<td>strong</td>
+<td>both (?)</td>
+<td>NA</td>
+<td>duck</td>
+</tr>
+<tr class="odd">
+<td>Javascript</td>
+<td>dynamic</td>
+<td>weak</td>
+<td>NA</td>
+<td>NA</td>
+<td>NA</td>
+</tr>
+</tbody>
+</table>
+<p>Java has (had?) an explicit type system and is (was?) based on nominal inheritance. This means that every variable must be typed and hierarchies of classes and interfaces tend to emerge. In my opinion, for this reason Java type system is heavy and adds overhead. When you change a type, you have to chase all the type errors in the hierarchy. So you do not have to maintain your code base, but also your types.</p>
+<h1 id="typescript-is-lightweight-if-used-wisely-imo">Typescript is lightweight, if used wisely (imo)</h1>
+<p>Typescript is statically typed, but its type system is very different from Java's. In my opinion, it is closer to Ruby than Java!</p>
+<ul>
+<li>Structural inheritance is similar to duck typing (but a property must exist at compile time).</li>
+<li>Typing is implicit and types can be inferred (but there is no run time check).</li>
+<li>Type guards and disjoint unions allow us to emulate dynamic typing at run time.</li>
+<li>Typescript intentionally sets a trade off between safety and developer productivity. So, it is ok to be unsafe.</li>
+</ul>
+<p>Typescript is implicit. You can assign a type to every variable like in the snippet below, if you enjoy it. But you do not have to. Typescript is able to infer the correct types.</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> x: <span class="built_in">number</span> = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">const</span> x: User = &#123; name: <span class="string">'Marco'</span> &#125;;</span><br></pre></td></tr></table></figure>
+<p>Typescript interfaces have structural inheritance (but there is a proposal also for nominal). The following snippet of code compiles. Doesn't it look like duck typing?</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Dog&#123;&#125;</span><br><span class="line"><span class="keyword">interface</span> Duck&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">cook</span>(<span class="params">d: Duck</span>) </span>&#123;&#125;</span><br><span class="line"><span class="keyword">const</span> spot: Dog = &#123;&#125;</span><br><span class="line">cook(spot)</span><br></pre></td></tr></table></figure>
+<p>In Typescript there are classes and interfaces, but you do not have to build hierarchies. Flat data models are always better. In this way, you avoid premature and wrong abstractions</p>
+<p>Typescript is strong as Ruby and Java, but it is a different flavor of being strongly typed. As a human being, you might know the run time type of an expression better than a dumb algorithm. It might depend on contextual information you have, which is not inferable from code. You can take advantage of your über-Turing powers to increase your productivity. You can show that AI has not won the war against humans with syntactic constructs like</p>
+<ul>
+<li><code>!</code> (“hey compiler, I am sure this is not <code>null</code>”)</li>
+<li><code>as T</code> (“hey compiler, this is <code>T</code>”) (NB: it is not casting!)</li>
+</ul>
+<h1 id="where-typescript-is-useful">Where Typescript is useful</h1>
+<p>If you build an SDK or library used by other applications, types are useful to define clear contracts between APIs and consumers. In addition, during refactoring, types can help you understand the consequences of a change.</p>
+<p>Some types, common in functional programming languages, can help in everyday programming situations. For example,</p>
+<ul>
+<li><code>Option&lt;T&gt;</code> instead of <code>null</code> or <code>undefined</code> is better to describe a case when a function could return no value.</li>
+<li><code>Either&lt;T, U&gt;</code> can replace <code>try-catch</code> blocks, which are usually hard to debug.</li>
+<li><code>Task&lt;T&gt;</code> describes asynchronous computation and replaces <code>Promises</code>.</li>
+</ul>
+<p>For Typescript, <a href="https://github.com/gcanti/fp-ts" target="_blank" rel="noopener">fp-ts</a> is a very nice library that implements those types.</p>
+<p>The considerations above are generic and not specific to Typescript. Typescript has also a couple of nice features that are worth mentioning.</p>
+<p>Using <a href="https://www.typescriptlang.org/docs/handbook/advanced-types.html#mapped-types" target="_blank" rel="noopener">mapped types</a> it is possible to define complex type constraints. For example, let us assume you want to implement a database of superheroes. Each hero has a list of super skills. For example, Superman has <code>flying</code> and <code>superStrength</code>, Aquamen has <code>fishTalking</code> and Batman has nothing. You can define a generic interface <code>Hero</code> where the skill set depends on a generic that defines which kind of hero the interface represents. For example, if <code>bruce</code> is a <code>Batman</code> hero, then Typescript knows that he cannot fly!</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Skills &#123;</span><br><span class="line">   Batman: &#123;&#125;;</span><br><span class="line">   Superman: &#123;</span><br><span class="line">       flying: <span class="literal">true</span>;</span><br><span class="line">       superStrength: <span class="literal">true</span>;</span><br><span class="line">   &#125;;</span><br><span class="line">   Aquaman:&#123;</span><br><span class="line">       fishTalking: <span class="literal">true</span>;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">interface</span> Hero&lt;T <span class="keyword">extends</span> keyof Skills&gt; &#123;</span><br><span class="line">   skills: Skills[T];</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">const</span> clark: Hero&lt;<span class="string">'Superman'</span>&gt; = ...;</span><br><span class="line"><span class="keyword">const</span> bruce: Hero&lt;<span class="string">'Batman'</span>&gt; = ...;</span><br><span class="line"> </span><br><span class="line">clark.skills.flying; <span class="comment">// correct!</span></span><br><span class="line">bruce.skills.flying; <span class="comment">// type error!</span></span><br></pre></td></tr></table></figure>
+<p>You can use this trick to document your code. I think that it is impossible to express this kind of constraints in <code>jsDoc</code>.</p>
+<p>Type level operations are powerful in Typescript. Indeed, its type system is Turing complete. Look at <a href="https://github.com/tycho01/typical" target="_blank" rel="noopener">this project</a> for some very impressive examples.</p>
+<p>I do not think that our goal is to type as much as we can. Typescript offers us a great flexibility and expressivity. It is up to us to decide how much typing we need. In the superheroes example, we can decide to define <code>Hero.skills</code> as a simple object. In this case, the compiler cannot help us to understand when, by mistake, we try to make <code>bruce</code> fly. I am not sure that <code>bruce</code> would agree, but it is fine. It is up to us to understand from the context what is more important: safety or productivity.</p>
+<h1 id="when-typescript">When Typescript</h1>
+<p>Typescript lets us decide what, if and how to type. As a general rule, I would say that we need to type at least the boundaries. The boundaries are the interfaces with the external world.</p>
+<p>If a function is designed to be consumed by 3rd parties, it is better to type its arguments and return value.</p>
+<p>If we use higher order components to compose functions, the units of composition and the combinators should be typed. In this way, Typescript helps us to compose things in a meaningful way.</p>
+<p>Finally, we can use Typescript to follow a type-define-refine approach as proposed by <a href="https://www.manning.com/books/type-driven-development-with-idris" target="_blank" rel="noopener">Edwin Brady</a> for Idris.</p>
+<ul>
+<li>First, create a <strong>type</strong> describing what you want to achieve.</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getFirstCommand: <span class="function">(<span class="params">input: Input</span>) =&gt;</span> Command = &#123;&#125; <span class="keyword">as</span> <span class="built_in">any</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Then <strong>define</strong> a tentative implementation.</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getFirstCommand: <span class="function">(<span class="params">input: Input</span>) =&gt;</span> Command =</span><br><span class="line"> input =&gt; input.payload.commands[<span class="number">0</span>]; <span class="comment">// type error command can be undefined</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Finally, <strong>refine</strong> your implementation until type errors are resolved.</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> getFirstCommand: <span class="function">(<span class="params">input: Input</span>) =&gt;</span> Command =</span><br><span class="line"> input =&gt; input.payload.commands ? input.payload.commands[<span class="number">0</span>] : [];</span><br></pre></td></tr></table></figure>
+<h1 id="where-typescript-is-bad">Where Typescript is bad</h1>
+<p>Typescript is not the best programming language in the world. Other programming languages and different type systems could be more suitable in other contexts.</p>
+<p>There are several things of Typescript I do not like.</p>
+<p>For example, type errors look scary. In theory, Typescript team is working on a better notation. However, at the moment, error messages are quite long. Despite of that, they are very informative. If you read them carefully, you should be able to fix them easily.</p>
+<p>Type level operations can be complicated and hacky. In real life, though, you can learn just the most common tricks, like mapped types. Even if it is interesting theoretically, you don't really need to implement <a href="https://github.com/Microsoft/TypeScript/issues/14833" target="_blank" rel="noopener">Turing machines</a> with Typescript types in your daily programming job.</p>
+<p>Finally, Typescript is Javascript. You must know Javascript (and its oddities) to understand Typescript.</p>
+<h1 id="conclusions">Conclusions</h1>
+<ul>
+<li>Types do not have thaumaturgical qualities, they are just a tool.</li>
+<li>There aren't typeless and typeful languages, but many type systems.</li>
+<li>Imo Typescript type system is lightweight, flexible and hackable.</li>
+<li>Typescript has some useful features that help us in everyday programming.</li>
+<li>We should not type as much as we can. It is more important to type the boundaries.</li>
+<li>Typescript is not perfect.</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/typescript/" rel="tag"># typescript</a>
+          
+            <a href="/tags/type-theory/" rel="tag"># type theory</a>
+          
+            <a href="/tags/software-engineering/" rel="tag"># software engineering</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/25/performance-evaluation-and-refactoring/" rel="next" title="Performance Evaluation and Refactoring">
+                <i class="fa fa-chevron-left"></i> Performance Evaluation and Refactoring
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">mstn</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mstn" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.npmjs.com/~mstn" target="_blank" title="Npm"><i class="fa fa-fw fa-code"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://atmospherejs.com/mstn" target="_blank" title="Atmosphere"><i class="fa fa-fw fa-rocket"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://medium.com/@mstn" target="_blank" title="Medium"><i class="fa fa-fw fa-medium"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mstn@posteo.org" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#types-are-just-a-tool"><span class="nav-number">1.</span> <span class="nav-text">Types are just a tool</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#to-type-or-not-to-type-thats-the-wrong-question"><span class="nav-number">2.</span> <span class="nav-text">To type or not to type: that&#39;s the (wrong) question</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#a-little-type-theory"><span class="nav-number">3.</span> <span class="nav-text">A little type theory</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#typescript-is-lightweight-if-used-wisely-imo"><span class="nav-number">4.</span> <span class="nav-text">Typescript is lightweight, if used wisely (imo)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#where-typescript-is-useful"><span class="nav-number">5.</span> <span class="nav-text">Where Typescript is useful</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#when-typescript"><span class="nav-number">6.</span> <span class="nav-text">When Typescript</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#where-typescript-is-bad"><span class="nav-number">7.</span> <span class="nav-text">Where Typescript is bad</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#conclusions"><span class="nav-number">8.</span> <span class="nav-text">Conclusions</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mstn</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-80361243-4"></script><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" /><script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script><script>window.cookieconsent.initialise({content: {message: "This website uses cookies (gtag/Google Analytics) to measure content popularity. If I see there is interest in what I write, I am more encouraged to publish new stuff. If you click on the button, you will give your consent for cookies.",dismiss: "Accept Cookies",},onStatusChange: function(status) {  if ( this.hasConsented() ) {       window.dataLayer = window.dataLayer || [];       function gtag(){dataLayer.push(arguments);}       gtag("js", new Date());       gtag("config", "UA-80361243-4");   } },"palette": {     "popup": {       "background": "#000"     },     "button": {       "background": "#f1d600"     }   } })</script></body>
+</html>

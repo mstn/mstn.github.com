@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="High Speed Trains are killing the European railway network (2013). The author shows that saved travelling time is not much compared to increased ticket prices. In addition, even if trains are actuall">
+<meta name="keywords" content="performance,graphql,logging,trains,react">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Weekly digest (week 27-2018)">
+<meta property="og:url" content="http://mstn.github.io/2018/07/06/weekly-digest-272018/index.html">
+<meta property="og:site_name" content="mstn&#39;s blog">
+<meta property="og:description" content="High Speed Trains are killing the European railway network (2013). The author shows that saved travelling time is not much compared to increased ticket prices. In addition, even if trains are actuall">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-25T09:29:06.579Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Weekly digest (week 27-2018)">
+<meta name="twitter:description" content="High Speed Trains are killing the European railway network (2013). The author shows that saved travelling time is not much compared to increased ticket prices. In addition, even if trains are actuall">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="mstn's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://mstn.github.io/2018/07/06/weekly-digest-272018/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Weekly digest (week 27-2018) | mstn's blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mstn's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">mstn@posteo.org</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://mstn.github.io/2018/07/06/weekly-digest-272018/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mstn">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mstn's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Weekly digest (week 27-2018)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-07-06 09:00:00" itemprop="dateCreated datePublished" datetime="2018-07-06T09:00:00+02:00">2018-07-06</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-07-25 11:29:06" itemprop="dateModified" datetime="2019-07-25T11:29:06+02:00">2019-07-25</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li><a href="http://www.lowtechmagazine.com/2013/12/high-speed-trains-are-killing-the-european-railway-network.html" target="_blank" rel="noopener">High Speed Trains are killing the European railway network</a> (2013). The author shows that saved travelling time is not much compared to increased ticket prices. In addition, even if trains are actually a more sustainable alternative to air traffic, the high cost of high speed train tickets forced more people to choose cheap but polluting flights over trains. Hence, the overall effect of high speed trains on the environment is negative. Wu Ming 1 from <a href="https://en.wikipedia.org/wiki/Wu_Ming" target="_blank" rel="noopener">Wu Ming collective</a> <a href="https://www.amazon.it/viaggio-promettiamo-breve-Venticinque-lotte/dp/8806225642/" target="_blank" rel="noopener">wrote</a> an interesting book about the fights agaist high speed trains in Val di Susa (in Italian).</li>
+<li><a href="https://code.fb.com/android/profilo-understanding-app-performance-in-the-wild/" target="_blank" rel="noopener">Understanding app performances in the wild</a>. Facebook has released Profilo, an a high-throughput, mobile-first performance tracing library. This tool allows developers to collect and analyse production performance traces. Profilo is available only for Android, at least for now.</li>
+<li><p><a href="https://medium.com/netflix-techblog/lessons-from-building-observability-tools-at-netflix-7cfafed6ab17" target="_blank" rel="noopener">Lessons from Building Observability Tools at Netflix</a>. Netflix relies on several metrics to measure customers’ experience and to improve their product. Simply storing logs does not scale well and the microservice architecture adopted by Netflix introduces new challenges, too. Here is what Netflix did.</p>
+<ul>
+<li>Logs are kept and processed in memory and persisted only when needed. The bigger the system is, the higher storage costs and query times are. See also <a href="https://medium.com/netflix-techblog/stream-processing-with-mantis-78af913f51a6" target="_blank" rel="noopener">Mantis</a>.</li>
+<li>Microservices produce several distributed streams of logs. In order the get new insights on logs it is important to enrich traces with contextual information &quot;so that multiple traces can be grouped together across services&quot;.</li>
+<li>Traces are not analysed by eye, of course. Metrics analysis should be automatized and alerts should be raised if anomalies are detected. Netflix went beyond trivial threshold alerting and implemented some statistical/machine learning algorithms to analyse metrics trends.</li>
+<li>Log storing and retriving must be fast. Netflix used different databases (Cassandra, Elasticsearch, Hive) depending on the kinds of queries. For example, Elasticsearch is better for queries on different fields while Cassandra is better for queries by ids.</li>
+<li>Logs and analysis are made available to engineers and users through custom user interfaces. It does not make sense to show all logs always because not everybody is able to understand them.</li>
+</ul></li>
+</ul>
+<p>It would interesting to know what they do for limiting the overhead of log collecting on the whole system performances.</p>
+<ul>
+<li><a href="https://brandur.org/graphql" target="_blank" rel="noopener">Living APIs, and the Case for GraphQL</a>. The author says that, despite some interests from the developer community and some big players (e.g. Github), GraphQL isn't spreading very fast. The reason for the author is that &quot;GraphQL’s biggest problem may be that,although it’s better, it’s not 'better enough'&quot; with respect to REST. Then he makes some in depth arguments about why GraphQL is better. Instead, it would be interesting to know why it is not better enough.</li>
+<li>React 16 <a href="https://building.calibreapp.com/debugging-react-performance-with-react-16-and-chrome-devtools-c90698a522ad" target="_blank" rel="noopener">makes available</a> some performance metrics via browsers <a href="https://www.html5rocks.com/en/tutorials/webperformance/usertiming/" target="_blank" rel="noopener">User Timing API</a>. This will open a lot of possibilities for <a href="https://reactjs.org/docs/optimizing-performance.html#profiling-components-with-the-chrome-performance-tab" target="_blank" rel="noopener">profiling components</a>. For example, it could be interesting to see performance tools integrated into our CI processes. <a href="https://jobs.zalando.com/tech/blog/loading-time-matters/" target="_blank" rel="noopener">Here</a> is a report from Zalando engineers about their real world experience with performance optimization in React.</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/performance/" rel="tag"># performance</a>
+          
+            <a href="/tags/graphql/" rel="tag"># graphql</a>
+          
+            <a href="/tags/logging/" rel="tag"># logging</a>
+          
+            <a href="/tags/trains/" rel="tag"># trains</a>
+          
+            <a href="/tags/react/" rel="tag"># react</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/08/fixed-size-arrays-in-typescript/" rel="next" title="Fixed size arrays in Typescript">
+                <i class="fa fa-chevron-left"></i> Fixed size arrays in Typescript
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/08/milner-bigraphs-matrices/" rel="prev" title="Matrix calculus for Milner's Bigraphs">
+                Matrix calculus for Milner's Bigraphs <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">mstn</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mstn" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.npmjs.com/~mstn" target="_blank" title="Npm"><i class="fa fa-fw fa-code"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://atmospherejs.com/mstn" target="_blank" title="Atmosphere"><i class="fa fa-fw fa-rocket"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://medium.com/@mstn" target="_blank" title="Medium"><i class="fa fa-fw fa-medium"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mstn@posteo.org" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mstn</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-80361243-4"></script><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" /><script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script><script>window.cookieconsent.initialise({content: {message: "This website uses cookies (gtag/Google Analytics) to measure content popularity. If I see there is interest in what I write, I am more encouraged to publish new stuff. If you click on the button, you will give your consent for cookies.",dismiss: "Accept Cookies",},onStatusChange: function(status) {  if ( this.hasConsented() ) {       window.dataLayer = window.dataLayer || [];       function gtag(){dataLayer.push(arguments);}       gtag("js", new Date());       gtag("config", "UA-80361243-4");   } },"palette": {     "popup": {       "background": "#000"     },     "button": {       "background": "#f1d600"     }   } })</script></body>
+</html>

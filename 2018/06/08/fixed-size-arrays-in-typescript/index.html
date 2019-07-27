@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Dependent types are types whose definition depends on a value (from Wikipedia). Typescript does not support dependent types per se. However, literal types, even if they are not actual values, allow us">
+<meta name="keywords" content="typescript,dependent types">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fixed size arrays in Typescript">
+<meta property="og:url" content="http://mstn.github.io/2018/06/08/fixed-size-arrays-in-typescript/index.html">
+<meta property="og:site_name" content="mstn&#39;s blog">
+<meta property="og:description" content="Dependent types are types whose definition depends on a value (from Wikipedia). Typescript does not support dependent types per se. However, literal types, even if they are not actual values, allow us">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-25T09:29:06.575Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fixed size arrays in Typescript">
+<meta name="twitter:description" content="Dependent types are types whose definition depends on a value (from Wikipedia). Typescript does not support dependent types per se. However, literal types, even if they are not actual values, allow us">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="mstn's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://mstn.github.io/2018/06/08/fixed-size-arrays-in-typescript/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Fixed size arrays in Typescript | mstn's blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mstn's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">mstn@posteo.org</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://mstn.github.io/2018/06/08/fixed-size-arrays-in-typescript/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mstn">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mstn's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Fixed size arrays in Typescript
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-06-08 09:00:00" itemprop="dateCreated datePublished" datetime="2018-06-08T09:00:00+02:00">2018-06-08</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-07-25 11:29:06" itemprop="dateModified" datetime="2019-07-25T11:29:06+02:00">2019-07-25</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Dependent types are types whose definition depends on a value (from Wikipedia).</p>
+<p>Typescript does not support dependent types <em>per se</em>. However, literal types, even if they are not actual values, allow us to do some interesting things.</p>
+<p>For instance, a classical introductory example to dependent types involves the definition of arrays of fixed length. It turns out that we can define, with some limitations, a type for arrays of fixed size in Typescript, too.</p>
+<p>Let's see in details what we are going to replicate in Typescript.</p>
+<p>In many modern programming language, it is possible to define arrays whose elements have a given type, let's say strings. In Typescript, we write:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a: <span class="built_in">Array</span>&lt;string&gt;;</span><br><span class="line">a = []; <span class="comment">// ok</span></span><br><span class="line">a = [ <span class="string">'a'</span> ]; <span class="comment">// ok</span></span><br><span class="line">a = [ <span class="literal">true</span> ]; <span class="comment">// type error!</span></span><br></pre></td></tr></table></figure>
+<p>Dependent types parametrize type definition by values of another type. In the case of arrays we can define arrays of fixed size, for example:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a: <span class="built_in">Array</span>&lt;<span class="number">2</span>, string&gt;;</span><br><span class="line">a = [ <span class="string">'a'</span>, <span class="string">'b'</span> ]; <span class="comment">// ok</span></span><br><span class="line">a = [ <span class="string">'a'</span> ]; <span class="comment">// type error!</span></span><br></pre></td></tr></table></figure>
+<p>In the example above, the size of arrays is checked at compile time. This means that, if a program compiles correctly, then we will not have a runtime exception because the size of the array is always what we expect.</p>
+<p>I created an <a href="https://www.npmjs.com/package/fixed-size-array" target="_blank" rel="noopener">npm package</a> with the type definition. It boils down to <a href="https://github.com/mstn/fixed-size-array/" target="_blank" rel="noopener">few lines of code</a>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type FixedSizeArray&lt;N extends number, T&gt; = N extends <span class="number">0</span> ? never[] : &#123;</span><br><span class="line">    <span class="number">0</span>: T;</span><br><span class="line">    length: N;</span><br><span class="line">&#125; &amp; ReadonlyArray&lt;T&gt;;</span><br></pre></td></tr></table></figure>
+<p>Let's see in details why and when it works.</p>
+<p>First, we use the trick introduced in Typescript 2.7 for fixed size tuples. The <code>length</code> of an array has a numeric literal type. We need it to match tuples of exact size.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> d: FixedSizeArray&lt;<span class="number">2</span>, string&gt;;</span><br><span class="line"></span><br><span class="line">d = [ <span class="string">'a'</span>, <span class="string">'b'</span> ]; <span class="comment">// ok</span></span><br><span class="line">d = [ <span class="string">'a'</span> ]; <span class="comment">// type error</span></span><br><span class="line">d = [ <span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span> ]; <span class="comment">// type error</span></span><br></pre></td></tr></table></figure>
+<p>The intersection with <code>ReadonlyArray&lt;T&gt;</code> is needed to enforce the type of the array elements to be <code>T</code>. In addition, fixed size arrays inherit methods of <code>ReadonlyArray</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d = [<span class="string">'a'</span>, <span class="literal">true</span>]; <span class="comment">// type error</span></span><br><span class="line">d = [<span class="literal">true</span>, <span class="string">'a'</span>]; <span class="comment">// type error</span></span><br></pre></td></tr></table></figure>
+<p>We use conditional types (Typescript &gt;=2.8) for handling zero length arrays. In Typescript (&gt;= 2.8) the type of <code>[]</code> is always <code>never[]</code>; so, if <code>N</code> is <code>0</code>, the type must be <code>never[]</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> e: FixedSizeArray&lt;<span class="number">0</span>, string&gt;;</span><br><span class="line"></span><br><span class="line">e = []; <span class="comment">// ok</span></span><br><span class="line">e = [ <span class="string">'a'</span> ]; <span class="comment">// type error</span></span><br><span class="line">e = [] <span class="keyword">as</span> string[]; <span class="comment">// type error</span></span><br></pre></td></tr></table></figure>
+<p>Finally, property <code>0</code> is required because we can assign tuples only to tuple-like objects and a tuple-like object must have at least <code>0</code> defined by design (<a href="https://github.com/Microsoft/TypeScript/issues/24680#issuecomment-394616609" target="_blank" rel="noopener">source</a>).</p>
+<p>As pointed out by <span class="citation">@AnyhowStep</span> <a href="https://github.com/Microsoft/TypeScript/issues/24680#issuecomment-394710740" target="_blank" rel="noopener">here</a>, we can see the limitations of this approach when we try to access elements through their indexes.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a: FixedSizeArray&lt;<span class="number">2</span>, string&gt;;</span><br><span class="line">a = [ <span class="string">'1'</span>, <span class="string">'2'</span> ]; <span class="comment">// ok</span></span><br><span class="line">a[<span class="number">0</span>] = <span class="string">'1'</span>; <span class="comment">// ok</span></span><br><span class="line">a[<span class="number">1</span>] = <span class="string">'2'</span>; <span class="comment">// type error, but it should be ok</span></span><br></pre></td></tr></table></figure>
+<p>Another more complex example showing the same problem with <code>keyof</code> type constructor.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">type Range&lt;N extends number&gt; = keyof FixedSizeArray&lt;<span class="number">2</span>, string&gt;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> r: Range&lt;<span class="number">2</span>&gt;; <span class="comment">// it is '0' | 'length' | ... (read only array props)</span></span><br><span class="line"></span><br><span class="line">r = <span class="string">'length'</span>;</span><br><span class="line">r = <span class="string">'0'</span>;</span><br><span class="line">r = <span class="string">'1'</span>; <span class="comment">// error! I would not expect an error</span></span><br></pre></td></tr></table></figure>
+<p>A better implementation could use <a href="https://github.com/Microsoft/TypeScript/issues/15480" target="_blank" rel="noopener">range types</a>. At the moment Typescript does not support range types and, as far as I know, range types are not on their roadmap in any near future. However, if we had a <code>range</code> operator similar to <code>keyof</code> operator, we could fix the problem above and simplify the definition with:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> FixedSizeArray&lt;U <span class="keyword">extends</span> <span class="built_in">number</span>, T&gt; = &#123;</span><br><span class="line">    [k <span class="keyword">in</span> range(U)]: T;</span><br><span class="line">&#125; &amp; &#123; length: U &#125;;</span><br></pre></td></tr></table></figure>
+<p>Another limitation is that it is not possible to do any arithmetic with numeric literal types in Typescript. Apparently, Typescript developers have found some <a href="https://github.com/Microsoft/TypeScript/issues/8112" target="_blank" rel="noopener">technical problems</a>. It is a pity! With numeric literal type arithmetic we could define, for example, that <code>insert</code> applied to an array of length <code>N</code> will return an array of lenght <code>N+1</code>. Since this is not possible for now, we have to stick to immutable arrays.</p>
+<p>Compared with the full firepower of dependent types, our arrays seem a little thing. Still, having a type for immutable arrays of a given length is a lovely feature to have in many practical cases. For example, in React we could specify the exact number of children a parent can have. Another example is a function that requires two array arguments of the same length.</p>
+<p>I wonder if we can find any hacks for current limitations without introducing new constructs to the language.</p>
+<p>A common criticism to dependent types is that they are quite complex to handle for humble programmers. Hence, I think it is interesting to see which features of dependent types can be expressed or mimicked in a programming language without importing all their complexity.</p>
+<p>It would be interesting to understand if we can prove &quot;theorems&quot; on Typscript programs using its type system in a similar way to what is done in dependent type languages. <a href="https://github.com/tycho01" target="_blank" rel="noopener">Tycho</a> has been developing <a href="https://github.com/tycho01/typical" target="_blank" rel="noopener">an experimental library</a> of type-level operations for TypeScript. I think it could be a good starting point.</p>
+<h2 id="credits">Credits</h2>
+<p>Numeric literals for array length has been used for tuples <a href="https://github.com/Microsoft/TypeScript/pull/17765" target="_blank" rel="noopener">since TS 2.7</a>.</p>
+<p>Type definition had been simplified as suggested <a href="https://github.com/Microsoft/TypeScript/issues/6229#issuecomment-376988681" target="_blank" rel="noopener">here</a> by <span class="citation">@tycho01</span>.</p>
+<p>Daniel explained me better how typing works with tuples <a href="https://github.com/Microsoft/TypeScript/issues/24680#issuecomment-394616609" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="references">References</h2>
+<p>Wikipedia, <a href="https://en.wikipedia.org/wiki/Dependent_type" target="_blank" rel="noopener">Dependent Type</a>, accessed 10/04/2018</p>
+<h2 id="more-resources">More resources</h2>
+<ul>
+<li><a href="https://github.com/mstn/fixed-size-array/" target="_blank" rel="noopener">Source code</a></li>
+<li><a href="https://www.npmjs.com/package/fixed-size-array" target="_blank" rel="noopener">NPM package</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/typescript/" rel="tag"># typescript</a>
+          
+            <a href="/tags/dependent-types/" rel="tag"># dependent types</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/06/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/06/weekly-digest-272018/" rel="prev" title="Weekly digest (week 27-2018)">
+                Weekly digest (week 27-2018) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">mstn</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mstn" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.npmjs.com/~mstn" target="_blank" title="Npm"><i class="fa fa-fw fa-code"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://atmospherejs.com/mstn" target="_blank" title="Atmosphere"><i class="fa fa-fw fa-rocket"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://medium.com/@mstn" target="_blank" title="Medium"><i class="fa fa-fw fa-medium"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mstn@posteo.org" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#credits"><span class="nav-number">1.</span> <span class="nav-text">Credits</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#references"><span class="nav-number">2.</span> <span class="nav-text">References</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#more-resources"><span class="nav-number">3.</span> <span class="nav-text">More resources</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mstn</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-80361243-4"></script><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" /><script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script><script>window.cookieconsent.initialise({content: {message: "This website uses cookies (gtag/Google Analytics) to measure content popularity. If I see there is interest in what I write, I am more encouraged to publish new stuff. If you click on the button, you will give your consent for cookies.",dismiss: "Accept Cookies",},onStatusChange: function(status) {  if ( this.hasConsented() ) {       window.dataLayer = window.dataLayer || [];       function gtag(){dataLayer.push(arguments);}       gtag("js", new Date());       gtag("config", "UA-80361243-4");   } },"palette": {     "popup": {       "background": "#000"     },     "button": {       "background": "#f1d600"     }   } })</script></body>
+</html>

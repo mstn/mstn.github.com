@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="In this post I want to talk about a language for representing user interfaces and their dynamics. At the moment, the language is only sketched and I would like to present the basic idea even if it is">
+<meta name="keywords" content="react,web,vue,bigraphs,signal flow graphs,category theory">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sketching a language for Web Programming">
+<meta property="og:url" content="http://mstn.github.io/2018/11/06/sketching-a-language-for-web/index.html">
+<meta property="og:site_name" content="mstn&#39;s blog">
+<meta property="og:description" content="In this post I want to talk about a language for representing user interfaces and their dynamics. At the moment, the language is only sketched and I would like to present the basic idea even if it is">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://mstn.github.io/images/web/rules-for-button-and-composition.png">
+<meta property="og:image" content="http://mstn.github.io/images/web/if-rule.png">
+<meta property="og:image" content="http://mstn.github.io/images/web/state-examples.png">
+<meta property="og:image" content="http://mstn.github.io/images/web/counter.png">
+<meta property="og:image" content="http://mstn.github.io/images/web/counter-steps-1-2.png">
+<meta property="og:image" content="http://mstn.github.io/images/web/counter-steps-3-4.png">
+<meta property="og:updated_time" content="2019-07-25T09:29:06.579Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sketching a language for Web Programming">
+<meta name="twitter:description" content="In this post I want to talk about a language for representing user interfaces and their dynamics. At the moment, the language is only sketched and I would like to present the basic idea even if it is">
+<meta name="twitter:image" content="http://mstn.github.io/images/web/rules-for-button-and-composition.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="mstn's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://mstn.github.io/2018/11/06/sketching-a-language-for-web/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Sketching a language for Web Programming | mstn's blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mstn's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">mstn@posteo.org</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://mstn.github.io/2018/11/06/sketching-a-language-for-web/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mstn">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mstn's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Sketching a language for Web Programming
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-11-06 09:00:00" itemprop="dateCreated datePublished" datetime="2018-11-06T09:00:00+01:00">2018-11-06</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-07-25 11:29:06" itemprop="dateModified" datetime="2019-07-25T11:29:06+02:00">2019-07-25</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>In this post I want to talk about a language for representing user interfaces and their dynamics. At the moment, the language is only sketched and I would like to present the basic idea even if it is nothing but an idea.</p>
+<p>My background is from React and Vue. So this post is influenced by them, in a positive and in a negative way. I do not know Elm, but I feel there are some similarities with what I am writing here, in particular the idea of decoupling views from updates.</p>
+<p>The brief summary outlined below does not pretend to be complete nor accurate. Rather, I want to highlight the main points I would like to tackle with my language proposal.</p>
+<h1 id="an-opinionated-inaccurate-view">An opinionated inaccurate view</h1>
+<p>Over the past years several frameworks and programming paradigms have been emerged to build Web applications. These approaches can be very different, but they have some elements in common. Of course, reality is more complex than this summary. For example, I do not consider React Context API. However, I am not going to make a detailed comparison among different frameworks.</p>
+<h2 id="component-rendering-unit-bindings-lifecycle">Component = rendering unit + bindings + lifecycle</h2>
+<p>Components are the main unit. They define how to render a bit of user interface (view) from a state and bind dom events and elements (in a Babel of different syntaxes and semantics). Usually, components have a life-cycle (e.g. mount, destroy), can be composed and allow some form of child-parent communication (e.g. props, events).</p>
+<h2 id="views-are-defined-in-a-declarative-way">Views are defined in a declarative way</h2>
+<p>Views are usually defined in a declarative way. Programmers do not have to take care about how a page is rendered; this is different from previous approaches (e.g. Backbone) where programmers had to implement the actual rendering algorithm. There are at least two declarative approaches. The first one is based on templating languages that extend HTML syntax (e.g. handlebars) with some control statements (e.g. if, for each). In the other approach, views are defined in a native language with some primitives or functions to represent HTML tags (e.g. JSX is Javascript extended with HTML-like tags).</p>
+<h2 id="inter-component-communication">Inter-component communication</h2>
+<p>Historically, components lacked tools for complex inter-component communication. For this reason, several paradigms have popped up. For example, <a href="https://facebook.github.io/flux/docs/overview.html" target="_blank" rel="noopener">Flux</a> is a design pattern used in many libraries, e.g. Redux. Basically, an application has a global state as a unique source of truth. Individual components map the state to views and interact with the global state sending actions/events that mutate the original state.</p>
+<h1 id="a-more-abstract-approach">A more abstract approach</h1>
+<p>I want to adopt a more abstract point of view independent from the actual implementation.</p>
+<p>First, I want to represent views with a high level data structure. For example, a view is a tree, which is part of a bigger tree we call dom; I do not care if this tree is described using templates or JSX or pure functions, how elements are bound to state or which particular algorithm I use to update the actual dom in my browser.</p>
+<p>Then I want to abstract away from the underlying communication mechanisms and architectures. We want to describe what changes (e.g. data dependencies), not how (e.g. actions and mutations).</p>
+<p>Finally, dom and state must be separated and, above all, independent.</p>
+<p>The last point is inspired by bigraph theory [1]. Bigraphs are a formalism to model space and motion. I wrote a short introduction <a href="https://mstn.github.io/2018/09/08/milner-bigraphs-matrices/">here</a>. The underlying insight is that space and motion should be modeled by independent data structures.</p>
+<p>In an analogous way, we might think of a web application as a spatial part (dom) plus a dynamic part (communication). These parts are logically independent. For example, I should be able to click on an &quot;add to basket&quot; button and see the navbar basket updated regardless on where the button and the basket are located in the user interface.</p>
+<p>As a consequence, we do not need any special device for child-parent comunication. There is only one uniform communication mechanism independent from the dom hierarchy.</p>
+<p>Another aspect is state. In modern web development state is seen with suspect. We are told to avoid side effects and there are good reasons to follow this generic advice. However, I think, the problem is not state in itself, rather, the lack of compositionality of states. React and Vue are good tools to compose user interfaces (i.e. doms), but, in my opinion, they lack compositionality mechanisms for state (maybe Context API could change this).</p>
+<p>In the rest of this post, I will sketch an operational semantics and I will borrow several ideas from the operational semantics for signal flow graphs [2]. Please bear in mind that many important details are omitted and I am not giving a full working set of operational rules. All of this is very work in progress. My main goal is to communicate the informal intuition to the average programmer who does not know anything about operational semantics and category theory.</p>
+<h1 id="abstract-dom">Abstract dom</h1>
+<p>An abstract dom is a representation of possible dom states. We prefer the term abstract dom, because virtual dom is quite overloaded at the moment.</p>
+<p>An abstract dom is defined by three elements,</p>
+<ul>
+<li>Nodes</li>
+<li>IF Nodes</li>
+<li>EACH Nodes</li>
+</ul>
+<p>Nodes are standard and custom dom element such as <code>div</code>, <code>span</code> and so forth. IFs and EACHs are control nodes for conditional and iterative rendering, respectively.</p>
+<p>In other words, an abstract dom is a dom with some extra features. We could add recursion and other fancy stuff to the list of extra features, but, for now, we prefer to keep it simple. In practice, we define templates or jsx with IFs and EACHs. Rarely, we need more power. However, this is not a good reason to not add more power.</p>
+<p>A node has some ports and an inner state. Ports are like arguments of a function (even if their relation is not necessarily functional). Inner state is the state of the node. For example, a button can be <code>pressed</code> or <code>unpressed</code> or an <code>li</code> element can be parameterized by its position <span class="math inline">\(i\)</span> within a list.</p>
+<p>The behavior of individual nodes is defined by a set of rules. A rule is a labelled transition of the form <span class="math inline">\(t \overset{l}{\rightarrow} t&#39;\)</span> where <span class="math inline">\(t\)</span> is the redex, <span class="math inline">\(t&#39;\)</span> is the reductum and <span class="math inline">\(l\)</span> is a label.</p>
+<p>For example, consider we want to define the behavior of a button. In the picture below we define a node for the button element and two rules that simulate the click event in HTML.</p>
+<div class="figure">
+<img src="/images/web/rules-for-button-and-composition.png">
+
+</div>
+<p>A button is represented as a box with the name of the tag (i.e. <code>button</code>) and an inner state (i.e. <code>pressed</code> or <code>unpressed</code>). A button has two ports. Intuitively, one listens to dom events while the other is an event handler. We label ports with numbers in order to distinguish them.</p>
+<p>A transition label is not a single symbol, but a set of symbols corresponding to the possible values on ports. Instead of adding labels on the top of arrows, we put labels on redexes. Not all ports must have a value in a transition and the assignment is not necessarily functional nor deterministic.</p>
+<p>The first rule <code>R_BTN_CLICK</code> says that, if a button is <code>unpressed</code>, when it gets a click event on port 2, then it changes its state to <code>pressed</code>.</p>
+<p>Instead, if the button is already <code>pressed</code> and port 2 does not have any click event (e.g. user has released the button), then the button state gets <code>unpressed</code> again and a 1 is emitted on port 1. This is rule <code>R_BTN_RELEASED</code>.</p>
+<p>As for bigraphs, nodes can be nested. On the right hand side of the picture above, our button is inserted into a <code>div</code> element and has a sibling <code>span</code> node. Note that port links are independent on the dom hierarchy and cross the boundaries of the parent element.</p>
+<p>Control nodes are like dom nodes but with special rules. Let's start with IF.</p>
+<div class="figure">
+<img src="/images/web/if-rule.png">
+
+</div>
+<p>On the right, we represent the IF node while the two IF rules are on the left. A IF node is a box (we use thicker borders to denote control nodes), with a port (the IF condition) and two holes. As we will see later, every node can have holes that can be filled by other nodes (again, this is from bigraph theory). We use dashed boxes to denote not active areas. Intuitively, a sub-tree within a dashed box is not displayed and its connections are not active. In the case of IF nodes, hole 0 is the &quot;then&quot; branch while hole 1 is the &quot;else&quot; branch. The two rules are called <code>R_IF_FALSE</code> and <code>R_IF_TRUE</code>, respectively, and are fairly trivial.</p>
+<h1 id="state">State</h1>
+<p>We denote a state as a node with some ports and a value. State ports have a different color (i.e. red) because we want nodes communication to be mediated by state. In other words, we do not want to connect two dom nodes directly. However, I am not sure about this choice (which is influenced by the use of edges in bigraphs) and it could change in the future.</p>
+<p>A state is not just a value container. It is a value plus some rules to mutate this value. For example, the following picture shows some examples of state and state rules.</p>
+<div class="figure">
+<img src="/images/web/state-examples.png">
+
+</div>
+<p>Rules can leave the state unchanged like in <code>lt</code> (<code>R_LT2_TRUE</code> and <code>R_LT2_FALSE</code>) or <code>filter</code> (<code>R_FILTER</code>) or change the state like in <code>inc</code> (<code>R_INC</code>). <code>R_INC</code> increases the stored state by one. <code>R_LT2_TRUE</code> and <code>R_LT2_FALSE</code> check if a value is less than 2 and return <code>true</code> or <code>false</code>, respectively. <code>R_FILTER</code> allows only some values to pass, in this case, only values equals to the state.</p>
+<h1 id="a-counter-example">A counter example</h1>
+<p>Now we are going to put together the building blocks described in previous section. We are going to build a simple counter that shows the number of button clicks and, if this number is greater than or equal to 2, the counter explodes.</p>
+<h2 id="the-counter">The Counter</h2>
+<div class="figure">
+<img src="/images/web/counter.png">
+
+</div>
+<p>The picture above represents our counter. We need two states for increasing the counter value and checking if the count has breached the threshold. Box nesting resembles the structure of the HTML page very closely.</p>
+<h2 id="first-click-on-button">First click on button</h2>
+<div class="figure">
+<img src="/images/web/counter-steps-1-2.png">
+
+</div>
+<p>Here, we show the transitions triggered when user clicks on the button once. The first transition is the application of the rule <code>R_BTN_CLICK</code>: when user clicks, the button state is changed to <code>pressed</code> and that is it. Here and in what follows, we mark red the parts changed in a transition.</p>
+<p>The second transition is more interesting. When button has state <code>pressed</code>, the only possible rule we might possibly apply is <code>R_BTN_RELEASED</code>. However, we need to check if we can apply this rule in a consistent way with other rules. In particular, button port <code>1</code> (right-bottom) has label <code>1</code>. This label is shared with <code>inc</code> state and <code>R_BTN_RELEASED</code> can be applied only if we can apply a rule for <code>inc</code> where port label is also <code>1</code>.</p>
+<p>In this case, the rule is <code>R_INC</code> and we can follow the same reasoning for <code>lt2</code> and apply rule <code>R_LT2_TRUE</code>.</p>
+<p>Again, this is just the basic idea. Several details must be clarified or fixed. We would like define a composition mechanism for individual rules with a sort of operational semantics in the fashion of [2].</p>
+<h2 id="second-click-on-button">Second click on button</h2>
+<div class="figure">
+<img src="/images/web/counter-steps-3-4.png">
+
+</div>
+<p>Then user can click on button once more. The first transition is the same as before. The second transition triggers <code>R_IF_FALSE</code>. So abstract dom changes, the <code>then</code>-branch is disabled and the text <code>BUM!</code> is displayed.</p>
+<p>Note that here we are overlooking several important details. For example, we should specify better what we mean when a dom region is disabled and how the corresponding &quot;links&quot; can be disabled, too (e.g. it should not be possible to click on the button again).</p>
+<h1 id="coming-soon">Coming soon</h1>
+<p>In some next post, we will add more details. In particular, I want to show:</p>
+<ul>
+<li>Each rules: some nodes can be rendered iteratively and dynamically. Think about <code>li</code> elements in a <code>ul</code> list.</li>
+<li>Composition: states and doms can be glued together. Building blocks are components, a mix of doms and states.</li>
+<li>A TODO app: a more complex example to show how to build something real (or almost real).</li>
+</ul>
+<h1 id="credits">Credits</h1>
+<p>Diagrams in this post are created using <a href="https://www.mathcha.io" target="_blank" rel="noopener">Mathcha</a>.</p>
+<h1 id="references">References</h1>
+<p>[1] Robin Milner. The space and motion of communicating agents. Cambridge University Press, 2009.</p>
+<p>[2] F. Bonchi, P. Sobocinski, and F. Zanasi. Full abstraction for signal flow graphs. ACM SIGPLAN Notices. Vol. 50. No. 1. ACM, 2015.</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/react/" rel="tag"># react</a>
+          
+            <a href="/tags/web/" rel="tag"># web</a>
+          
+            <a href="/tags/vue/" rel="tag"># vue</a>
+          
+            <a href="/tags/bigraphs/" rel="tag"># bigraphs</a>
+          
+            <a href="/tags/signal-flow-graphs/" rel="tag"># signal flow graphs</a>
+          
+            <a href="/tags/category-theory/" rel="tag"># category theory</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/08/milner-bigraphs-matrices/" rel="next" title="Matrix calculus for Milner's Bigraphs">
+                <i class="fa fa-chevron-left"></i> Matrix calculus for Milner's Bigraphs
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/02/sketching-a-language-for-web-2/" rel="prev" title="Sketching a language for Web Programming (Part II)">
+                Sketching a language for Web Programming (Part II) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">mstn</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mstn" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.npmjs.com/~mstn" target="_blank" title="Npm"><i class="fa fa-fw fa-code"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://atmospherejs.com/mstn" target="_blank" title="Atmosphere"><i class="fa fa-fw fa-rocket"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://medium.com/@mstn" target="_blank" title="Medium"><i class="fa fa-fw fa-medium"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mstn@posteo.org" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#an-opinionated-inaccurate-view"><span class="nav-number">1.</span> <span class="nav-text">An opinionated inaccurate view</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#component-rendering-unit-bindings-lifecycle"><span class="nav-number">1.1.</span> <span class="nav-text">Component = rendering unit + bindings + lifecycle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#views-are-defined-in-a-declarative-way"><span class="nav-number">1.2.</span> <span class="nav-text">Views are defined in a declarative way</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#inter-component-communication"><span class="nav-number">1.3.</span> <span class="nav-text">Inter-component communication</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#a-more-abstract-approach"><span class="nav-number">2.</span> <span class="nav-text">A more abstract approach</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#abstract-dom"><span class="nav-number">3.</span> <span class="nav-text">Abstract dom</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#state"><span class="nav-number">4.</span> <span class="nav-text">State</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#a-counter-example"><span class="nav-number">5.</span> <span class="nav-text">A counter example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#the-counter"><span class="nav-number">5.1.</span> <span class="nav-text">The Counter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#first-click-on-button"><span class="nav-number">5.2.</span> <span class="nav-text">First click on button</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#second-click-on-button"><span class="nav-number">5.3.</span> <span class="nav-text">Second click on button</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#coming-soon"><span class="nav-number">6.</span> <span class="nav-text">Coming soon</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#credits"><span class="nav-number">7.</span> <span class="nav-text">Credits</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#references"><span class="nav-number">8.</span> <span class="nav-text">References</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mstn</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-80361243-4"></script><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" /><script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script><script>window.cookieconsent.initialise({content: {message: "This website uses cookies (gtag/Google Analytics) to measure content popularity. If I see there is interest in what I write, I am more encouraged to publish new stuff. If you click on the button, you will give your consent for cookies.",dismiss: "Accept Cookies",},onStatusChange: function(status) {  if ( this.hasConsented() ) {       window.dataLayer = window.dataLayer || [];       function gtag(){dataLayer.push(arguments);}       gtag("js", new Date());       gtag("config", "UA-80361243-4");   } },"palette": {     "popup": {       "background": "#000"     },     "button": {       "background": "#f1d600"     }   } })</script></body>
+</html>

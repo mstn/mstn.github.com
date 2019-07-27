@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Today, in order to offer an interactive user experience, web apps need a lot of client side code. Javascript is the most expensive resource in modern applications. The cost of Javascript, to paraphras">
+<meta name="keywords" content="performance,web,vue,rails,refactoring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Performance Evaluation and Refactoring">
+<meta property="og:url" content="http://mstn.github.io/2019/07/25/performance-evaluation-and-refactoring/index.html">
+<meta property="og:site_name" content="mstn&#39;s blog">
+<meta property="og:description" content="Today, in order to offer an interactive user experience, web apps need a lot of client side code. Javascript is the most expensive resource in modern applications. The cost of Javascript, to paraphras">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://mstn.github.io/images/refactoring/P0.png">
+<meta property="og:image" content="http://mstn.github.io/images/refactoring/P1.png">
+<meta property="og:image" content="http://mstn.github.io/images/refactoring/P2.png">
+<meta property="og:image" content="http://mstn.github.io/images/refactoring/P3.png">
+<meta property="og:image" content="http://mstn.github.io/images/refactoring/P8.png">
+<meta property="og:image" content="http://mstn.github.io/images/refactoring/P4.png">
+<meta property="og:image" content="http://mstn.github.io/images/refactoring/P5.png">
+<meta property="og:image" content="http://mstn.github.io/images/refactoring/P7.png">
+<meta property="og:updated_time" content="2019-07-25T09:29:06.579Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Performance Evaluation and Refactoring">
+<meta name="twitter:description" content="Today, in order to offer an interactive user experience, web apps need a lot of client side code. Javascript is the most expensive resource in modern applications. The cost of Javascript, to paraphras">
+<meta name="twitter:image" content="http://mstn.github.io/images/refactoring/P0.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="mstn's blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="canonical" href="http://mstn.github.io/2019/07/25/performance-evaluation-and-refactoring/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Performance Evaluation and Refactoring | mstn's blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mstn's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">mstn@posteo.org</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://mstn.github.io/2019/07/25/performance-evaluation-and-refactoring/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mstn">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mstn's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Performance Evaluation and Refactoring
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-25 09:00:00 / Modified: 11:29:06" itemprop="dateCreated datePublished" datetime="2019-07-25T09:00:00+02:00">2019-07-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Today, in order to offer an interactive user experience, web apps need a lot of client side code. Javascript is the most expensive resource in modern applications. The cost of Javascript, to paraphrase Addy Osmani [2], is low performances.</p>
+<p>Our blazing fast shiny laptops crunch numbers easily. But Web developers are not a representative sample of the World population. So, even if our last web app works smoothly on my new laptop, it does not mean that my mom will have the same experience on her not-so-old tablet.</p>
+<p>Performances affect user experience, user retention, conversion rates and revenues (you can read some real numbers here [1]). So worrying about performances is not &quot;premature optimization&quot;, but should be part of the everyday development cycle.</p>
+<p>Google published some interesting notes about web and performances [1] with a lot of tools and suggestions to measure and improve them. You can find other examples on the same line on the web, for example, this [2] is a great case study analysis for the performances of the Walmart website. For a more detailed account, this [4] is a very valuable source, in particular if you are interested in understanding the inner workings of the Web as a platform.</p>
+<p>A common misconception is that the only bottleneck is the network. However, even if our gzipped bundle is small for modern standards, this does not imply that users perceive a web app as fast. In fact, bundle size affects the “time to interaction”, too. So, even if gzipped transmission is fast, from a user’s perspective interaction could be still laggy and slow. The time from the point of view of users is not only the time to download the bundle, but also the time required to parse, boot and start event loop processing.</p>
+<p>Addy Osmani gives a rule of thumb “350KB (gzipped) ~ 1MB ~ 14s until interactive”. He says that the ideal bundle size is &lt;200KB [2]. Surprisingly, this rule matches what I observed.</p>
+<p>If we build a new web application, we should learn and follow performance best practices. However, if we work on a legacy application, life is not always that easy. The reason is that we are not always free to follow the best practices; sometimes we need to accept compromises because a change could be too expensive or break things. How can we understand what leads to the best result with the minimal effort?</p>
+<p>In the rest of this post, I will talk about some strategies I adopted trying to improve performances for the webshop case study I introduced <a href="https://mstn.github.io/2019/02/24/two-phase-refactoring/">here</a>.</p>
+<h1 id="a-case-study">A case study</h1>
+<p>Let us consider, then, our webshop. In this case, the legacy Javascript is a bundle in the <code>head</code> section of the page. In theory, as from best practices, we could <code>defer</code> it, but it would not work in our case. Apparently, the legacy bundle is a dependency for some non-deferred code and seems to work only within <code>head</code> tags. In addition, we know that some css is changed by the bundle, dynamically. We want to run the css scripts before the page is rendered in order to avoid glitches.</p>
+<p>The reality is that this legacy bundle is a blob of code that we do not fully understand. It is not safe to mark it with <code>defer</code> or move the <code>script</code> tag at the end of the body.</p>
+<p>Fortunately, there is something we can do. Performance analysis gives us some hints about what to refactor first. It turns out that a few libraries are responsible for the most performance problems. So, if we focus only on them, we can introduce a big improvement with the least effort. The rest is just some code that we can leave untouched since performance optimization would not yield a big gain. (But there could be other reasons why we want to refactor it)</p>
+<h1 id="performance-analysis">Performance Analysis</h1>
+<p>In the rest of this section, I will show some data collected by <a href="https://www.webpagetest.org/" target="_blank" rel="noopener">WebPageTest</a> following [1]. I am sorry but I cannot share the original data. Moreover, tests are not reproducible and could have methodological flaws.</p>
+<p>However, even if I would not take my tests too seriously, we can easily identify some low hanging fruits.</p>
+<h2 id="high-parsing-and-loading-times">High parsing and loading times</h2>
+<p>To get started we observe <code>DOMContentLoaded</code> and <code>load</code>. Today, <a href="https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics" target="_blank" rel="noopener">other metrics</a> are considerated more accurate to measure user experience. However, the two old events can give us a ballpark figure.</p>
+<div class="figure">
+<img src="/images/refactoring/P0.png" alt="Parsing document (dom content loading) and image loading (on load) for home page.">
+<p class="caption">Parsing document (dom content loading) and image loading (on load) for home page.</p>
+</div>
+<div class="figure">
+<img src="/images/refactoring/P1.png" alt="Parsing document (dom content loading) and image loading (on load) for a product page.">
+<p class="caption">Parsing document (dom content loading) and image loading (on load) for a product page.</p>
+</div>
+<h2 id="the-reasons-for-not-so-good-performances">The reasons for not so good performances</h2>
+<div class="figure">
+<img src="/images/refactoring/P2.png" alt="Shares for home and product pages">
+<p class="caption">Shares for home and product pages</p>
+</div>
+<ul>
+<li>~55% requests for images (it increases “on load event” time), but the image size is “small”.</li>
+<li>1M (60%) for Javascript! This could be the reason of the high time for on dom content loaded event.</li>
+<li>Javascript in <code>head</code> could block dom rendering since the browser implements a single-threaded model of execution.</li>
+</ul>
+<p>How this affects user experience</p>
+<ul>
+<li>Page is blank for a few seconds on low end devices.</li>
+<li>Page is without images for a long time.</li>
+<li>Users cannot interact with the web page immediately.</li>
+</ul>
+<h2 id="a-deeper-look">A deeper look</h2>
+<div class="figure">
+<img src="/images/refactoring/P3.png" alt="Resource Usage (Chrome)">
+<p class="caption">Resource Usage (Chrome)</p>
+</div>
+<ul>
+<li>1M legacy Javascript code</li>
+<li>A lot of unused code (js/css) on a page</li>
+</ul>
+<h1 id="work-smarter-not-harder">Work smarter, not harder</h1>
+<p>The quick analysis suggests us that lazy loading for images and trimming the legacy bundle could reduce the problems outlined above. For now, we focus only on the latter.</p>
+<p>Since we cannot move the bundle or <code>defer</code> it, we can at least try to reduce its size. In this way, even if the bundle is still a render blocking resource, the time-to-render and the time-to-interaction should decrease.</p>
+<p>The Pareto principle or 80/20 rule says that &quot;80% of the effects come from 20% of the causes&quot; [5]. It is a rule of thumb that works in many cases. Let's try to apply this law to our case.</p>
+<p>Following the rule, the 20% of vendor libs should affect the 80% of bundle size. We have roughly 15 dependencies (1MB), 2 of them are ~80% of the total size. More or less, these are the numbers predicted by Pareto (bogus science works! ;P). The two libs are:</p>
+<ul>
+<li><code>chance.js</code> ~250KB</li>
+<li><code>libphonenumber.js</code> ~530KB</li>
+</ul>
+<p>The two libraries take a lot of computing time with respect to the rest of the legacy bundle. This is the flamegraph from Chrome Dev Tools.</p>
+<div class="figure">
+<img src="/images/refactoring/P8.png">
+
+</div>
+<p>So, can we get rid of them?</p>
+<p>First, we need to understand where the libs are used. We are lucky in this case because we can search for their occurrences in the code quite easily.</p>
+<p>The first one, <code>chance.js</code>, is a collection of random generators. It is used in dev environment. So the first thought is that we can remove it from production. We can do even better. From a little code inspection, we find that we do not really need the library. So the actionable task is: remove <code>chance.js</code> dependency.</p>
+<p>The second one, <code>libphonenumber.js</code>, is for phone number validation. It is used in a couple of forms and is huge because it is a <a href="https://www.npmjs.com/package/google-libphonenumber" target="_blank" rel="noopener">porting</a> of a library written in another programming language. There is a <a href="https://github.com/catamphetamine/libphonenumber-js" target="_blank" rel="noopener">lighter version</a>, but, in the QA process, we rely on the original Java library so we want to be 100% sure that we can validate the same phone number set. So, even if we will adopt the lighter version sooner or later, for now we have to stick with the bloated one.</p>
+<p>It is safe to move the lib at the end of the <code>body</code> tag. The library is used only after DOM is rendered and users can interact with the page. We could also load the library lazily. In webpack is <a href="https://webpack.js.org/guides/lazy-loading/" target="_blank" rel="noopener">very easy</a>. But for now we choose to move the lib without any other improvement.</p>
+<h1 id="measuring-the-improvement">Measuring the improvement</h1>
+<p>I measured performances before and after the refactoring described in the previous section. Please take into account that other factors could have affected the change. In particular, several weeks passed between the first and the second measurement since the refactoring was not approved to production immediately. Thus, in those weeks, the webshop evolved. In few words, I did not prepare the tests in a sound way.</p>
+<p>So let us take these numbers with a grain of salt. Images are screenshots from <a href="https://developers.google.com/web/tools/lighthouse/run" target="_blank" rel="noopener">Lighthouse</a> reports.</p>
+<p><a href="https://developers.google.com/web/tools/lighthouse/run" target="_blank" rel="noopener">Lighthouse</a> gives us more user centric metrics than <a href="https://www.webpagetest.org/" target="_blank" rel="noopener">WebPageTest</a>.</p>
+<p>Before refactoring (Emulated Nexus 5X, Simulated Slow 4G network)</p>
+<div class="figure">
+<img src="/images/refactoring/P4.png">
+
+</div>
+<p>After refactoring (Emulated Nexus 5X, Simulated Slow 4G network)</p>
+<div class="figure">
+<img src="/images/refactoring/P5.png">
+
+</div>
+<h1 id="how-vue-can-help-to-improve-performances">How Vue can help to improve performances</h1>
+<p>We think that performances could benefit from Vue. In this section, I discuss some possible strategies and ideas.</p>
+<h2 id="lazy-loading">Lazy loading</h2>
+<p>Since the webshop has a lot of images, we could use Vue for lazy loading and controlling when content is displayed.</p>
+<h2 id="optimistic-updates">Optimistic updates</h2>
+<p>In the majority of cases, server responses are predictable while failures are rare. For example, if a user adds a product to basket, the result of this action will increase the number of items in the navbar shopping cart with high probability.</p>
+<p>Hence, clients can guess the effect of a request on UI and UI can be updated accordingly before an actual response is back. When server responds, client initial guess is patched with the right behavior, if necessary. This kind of client updates are called optimistic updates for obvious reasons.</p>
+<p>Optimistic updates are important to improve user experience because they reduce the perceived latency in client-server communication. Users do not see loading wheels, but they get an immediate response to their actions as if the app were running locally.</p>
+<p>With Vue and VueX is easy to implement optimistic updates.</p>
+<h2 id="but-vue-has-a-cost">But Vue has a cost</h2>
+<p>As Javascript, even Vue has a cost. Vue is a complex framework which introduces some overhead. For example, a Vue instance parses HTML in order to find Vue components and build render functions (if we use <code>inline-template</code>s). If you look at a flamegraph of your page, you can actually measure this overhead.</p>
+<div class="figure">
+<img src="/images/refactoring/P7.png">
+
+</div>
+<p>As discussed in the previous <a href="https://mstn.github.io/2019/02/24/two-phase-refactoring/">post</a>, we had to create more Vue instances. Apparently (I am not 100% sure), from the picture above, Vue runs some parsing scripts for every instance. In the long run, we want to have just one instance. So this problem should disappear. It is ok to adopt a suboptimal solution during the first phase of a refactoring.</p>
+<h1 id="webpack-optimizations">Webpack optimizations</h1>
+<p>As part of the refactoring, we migrated from sprocket to webpack. Webpack is an excellent tool to understand how to reduce bundle sizes. Tools like <a href="https://www.npmjs.com/package/webpack-bundle-analyzer" target="_blank" rel="noopener">webpack-bundle-analyzer</a> help us to understand what there actually is in our bundle. Others like <a href="https://webpack.js.org/guides/tree-shaking/" target="_blank" rel="noopener">tree-shaking</a> allow us to remove dead code.</p>
+<h2 id="performance-budgets">Performance budgets</h2>
+<p>While refactoring it is easy to break things. For this reason, we have regression tests. In a similar way, we need some guards to prevent us to degrade performances as a consequence of refactoring or new developments. The idea is that CI fails if assets are bigger than some thresholds. These thresholds are called performance budgets. Webpack has <a href="https://webpack.js.org/configuration/performance/" target="_blank" rel="noopener">tools</a> to help us define performance budgets integrated with our pipeline.</p>
+<h2 id="take-care">Take care</h2>
+<p>Adding a new library is easy. Fattening our bundle is much more. Thus, we should set performance budgets as first thing. Then, we should pay attention to libraries that could bloat our code base.</p>
+<ul>
+<li>Libraries designed for the server side, for example winston, tend to be bloated. We should not use them at all.</li>
+<li>General purpose libraries, for example lodash, have a lot of features that we do not really need always. Webpacks has tools to trim unused features, see <a href="https://github.com/lodash/lodash-webpack-plugin" target="_blank" rel="noopener">lodash-webpack-plugin</a>. In my experience, you can half the relative weight of lodash using that plugin.</li>
+<li>Validation libraries are useful, but are usually big. For example, <a href="https://baianat.github.io/vee-validate/concepts/bundle-size.html" target="_blank" rel="noopener">VeeValidate</a> is nice. If you need to validate only an email field, maybe two lines of Javascript are better than a full library.</li>
+<li>Finally, we should <code>import</code> specific functions instead of full libraries. Again, webpack has tools to help us also in this case.</li>
+</ul>
+<h1 id="conclusion">Conclusion</h1>
+<p>Takeaways</p>
+<ul>
+<li>Web performances are important. The network is not the only bottleneck. Bundle size affects also computing and rendering time.</li>
+<li>Prioritize what you refactor depending on its impact on overall performances.</li>
+<li>Sub-optimal solutions are acceptable during refactoring.</li>
+<li>Performances are in the eye of the users. So techniques (lazy loading, optimistic updates) to reduce the perceived latency in client-server communication are important.</li>
+<li>Frameworks and libraries have a cost.</li>
+<li>Set performance budgets to avoid performance regressions.</li>
+<li>Invest in the right tools, e.g. webpack.</li>
+</ul>
+<h1 id="references">References</h1>
+<p>[1] Google, <a href="https://developers.google.com/web/fundamentals/performance" target="_blank" rel="noopener">Web Fundamentals: performance</a></p>
+<p>[2] Ivan Akulov, <a href="https://iamakulov.com/notes/walmart/" target="_blank" rel="noopener">Case study: analyzing the Walmart site performance</a>, 2018</p>
+<p>[3] Addy Osmani, <a href="https://medium.com/@addyosmani/the-cost-of-javascript-in-2018-7d8950fbb5d4" target="_blank" rel="noopener">The cost of Javascript in 2018</a>, 2018</p>
+<p>[4] Ilya Grigorik, <a href="https://hpbn.co/" target="_blank" rel="noopener">High Performance Browser Networking</a></p>
+<p>[5] https://en.wikipedia.org/wiki/Pareto_principle</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/performance/" rel="tag"># performance</a>
+          
+            <a href="/tags/web/" rel="tag"># web</a>
+          
+            <a href="/tags/vue/" rel="tag"># vue</a>
+          
+            <a href="/tags/rails/" rel="tag"># rails</a>
+          
+            <a href="/tags/refactoring/" rel="tag"># refactoring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/24/two-phase-refactoring/" rel="next" title="Two phase refactoring">
+                <i class="fa fa-chevron-left"></i> Two phase refactoring
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/27/typescript-for-typeless-people/" rel="prev" title="Typescript for typeless people">
+                Typescript for typeless people <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">mstn</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/mstn" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.npmjs.com/~mstn" target="_blank" title="Npm"><i class="fa fa-fw fa-code"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://atmospherejs.com/mstn" target="_blank" title="Atmosphere"><i class="fa fa-fw fa-rocket"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://medium.com/@mstn" target="_blank" title="Medium"><i class="fa fa-fw fa-medium"></i></a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mstn@posteo.org" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i></a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#a-case-study"><span class="nav-number">1.</span> <span class="nav-text">A case study</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#performance-analysis"><span class="nav-number">2.</span> <span class="nav-text">Performance Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#high-parsing-and-loading-times"><span class="nav-number">2.1.</span> <span class="nav-text">High parsing and loading times</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#the-reasons-for-not-so-good-performances"><span class="nav-number">2.2.</span> <span class="nav-text">The reasons for not so good performances</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-deeper-look"><span class="nav-number">2.3.</span> <span class="nav-text">A deeper look</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#work-smarter-not-harder"><span class="nav-number">3.</span> <span class="nav-text">Work smarter, not harder</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#measuring-the-improvement"><span class="nav-number">4.</span> <span class="nav-text">Measuring the improvement</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#how-vue-can-help-to-improve-performances"><span class="nav-number">5.</span> <span class="nav-text">How Vue can help to improve performances</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#lazy-loading"><span class="nav-number">5.1.</span> <span class="nav-text">Lazy loading</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimistic-updates"><span class="nav-number">5.2.</span> <span class="nav-text">Optimistic updates</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#but-vue-has-a-cost"><span class="nav-number">5.3.</span> <span class="nav-text">But Vue has a cost</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#webpack-optimizations"><span class="nav-number">6.</span> <span class="nav-text">Webpack optimizations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#performance-budgets"><span class="nav-number">6.1.</span> <span class="nav-text">Performance budgets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#take-care"><span class="nav-number">6.2.</span> <span class="nav-text">Take care</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#conclusion"><span class="nav-number">7.</span> <span class="nav-text">Conclusion</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#references"><span class="nav-number">8.</span> <span class="nav-text">References</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mstn</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-80361243-4"></script><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" /><script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script><script>window.cookieconsent.initialise({content: {message: "This website uses cookies (gtag/Google Analytics) to measure content popularity. If I see there is interest in what I write, I am more encouraged to publish new stuff. If you click on the button, you will give your consent for cookies.",dismiss: "Accept Cookies",},onStatusChange: function(status) {  if ( this.hasConsented() ) {       window.dataLayer = window.dataLayer || [];       function gtag(){dataLayer.push(arguments);}       gtag("js", new Date());       gtag("config", "UA-80361243-4");   } },"palette": {     "popup": {       "background": "#000"     },     "button": {       "background": "#f1d600"     }   } })</script></body>
+</html>
